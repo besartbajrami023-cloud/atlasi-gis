@@ -1,6 +1,15 @@
 [
   {
     "lloji": "harta",
+    "titulli": "Drenasi – Infrastruktura energjetike dhe zonat e veçanta (A4)",
+    "data": "2026-11-22",
+    "fajlli": "harta/2026-11-infrastruktura-energjetike-drenas.png",
+    "kopertina": "harta/2026-11-infrastruktura-energjetike-drenas.jpg",
+    "pershkrimi": "Largpërçuesit 400 kV (30,1 km) dhe 220 kV (33,2 km), rrjeti i distribucionit 35/10 kV (260 km), Ferronikeli (95,47 ha), ZIV Fusha e Mihjes së Re (965,05 ha), zona e energjisë së erës Sankoc (321,94 ha) dhe banimi i lartë sipas HZK (53,12 ha). Shkalla 1:125 000, KOSOVAREF01 (EPSG:9141). Burimi: shtresat GIS_Gllogoc.",
+    "shkarko": "harta/2026-11-infrastruktura-energjetike-drenas.pdf"
+  },
+  {
+    "lloji": "harta",
     "titulli": "Era mbi Kosovë · simulim interaktiv",
     "data": "2026-11-17",
     "fajlli": "harta/2026-11-era-mbi-kosove.html",
