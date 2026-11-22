@@ -1,0 +1,250 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Katalogu i Layerave</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{
+  --bg:#f6f7f5;--panel:#fff;--ink:#1d2320;--muted:#66706b;--line:#dde2de;
+  --accent:#1f6f5c;--accent-soft:#e3f1ec;--warn:#a2591a;--warn-soft:#fbeedd;--bad:#b23a3a;--bad-soft:#f8e3e3;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141816;--panel:#1c211f;--ink:#e6ebe8;--muted:#98a39d;--line:#2d3531;
+  --accent:#5cc2a6;--accent-soft:#1f3630;--warn:#e0a060;--warn-soft:#3a2c1c;--bad:#ef7d7d;--bad-soft:#3d2222;}}
+:root[data-theme="dark"]{
+  --bg:#141816;--panel:#1c211f;--ink:#e6ebe8;--muted:#98a39d;--line:#2d3531;
+  --accent:#5cc2a6;--accent-soft:#1f3630;--warn:#e0a060;--warn-soft:#3a2c1c;--bad:#ef7d7d;--bad-soft:#3d2222;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark}}
+:root[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",system-ui,sans-serif}
+header,.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding-block:20px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
+h1{margin:0;font-size:20px;text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin-top:2px;word-break:break-all}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;padding-block:20px;max-width:1400px;margin:0 auto}
+main{min-width:0}
+.mbar{display:none}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;padding-block:16px 96px}
+  aside{position:static}
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;gap:10px;align-items:center;
+    background:var(--panel);border-top:1px solid var(--line);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  .mbar span{flex:1;font-weight:600}
+  .mbar button{width:auto}
+}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+input[type=search],textarea,select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+input[type=search]{flex:1;min-width:200px}
+button{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:8px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;width:100%;padding:11px}
+:root[data-theme="dark"] button.primary{color:#0d1a16}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.primary{color:#0d1a16}}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:10px}
+summary{padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary .n{margin-left:auto;color:var(--muted);font-weight:400;font-size:12px}
+.row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 14px;border-top:1px solid var(--line);cursor:pointer}
+.row:hover{background:var(--accent-soft)}
+.row.sel{background:var(--accent-soft)}
+.row input{margin-top:3px}
+.t{font-weight:500;word-break:break-word}
+.meta{color:var(--muted);font-size:12px}
+.badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.b{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
+.b.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.b.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+aside{position:sticky;top:16px;align-self:start;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+aside h2{font-size:15px;margin:0 0 10px}
+label.f{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
+aside select,aside textarea{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow:auto}
+.chip{background:var(--accent-soft);border-radius:12px;padding:3px 8px;font-size:12px;display:flex;gap:6px;align-items:center}
+.chip b{cursor:pointer;font-weight:400;color:var(--muted)}
+.empty{color:var(--muted);font-size:13px}
+.note{font-size:12px;padding:8px 10px;border-radius:6px;margin-top:10px;background:var(--warn-soft);color:var(--warn)}
+.ok{font-size:12px;color:var(--accent);margin-top:8px;min-height:16px}
+.out{width:100%;height:120px;font:12px/1.4 Consolas,monospace;margin-top:8px;display:none}
+.radios{display:flex;gap:6px;flex-wrap:wrap}
+.radios label{border:1px solid var(--line);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:13px}
+.radios input{display:none}
+.radios input:checked+span{color:var(--accent);font-weight:600}
+.radios label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+</style>
+
+
+<header>
+  <h1>Katalogu i Layerave – Gllogoc / Drenas</h1>
+  <div class="sub" id="sub"></div>
+</header>
+<div class="wrap">
+  <main>
+    <div class="tools">
+      <input type="search" id="q" placeholder="Kërko layer (p.sh. rrug, liqen, HZK)…">
+      <select id="ft">
+        <option value="">Të gjitha llojet</option>
+        <option value="Point">Pika</option>
+        <option value="Line">Linja</option>
+        <option value="Polygon">Poligone</option>
+        <option value="raster">Rasterë</option>
+      </select>
+      <button id="hap">Hapi të gjitha</button>
+      <button id="pastro">Hiq zgjedhjet</button>
+    </div>
+    <div id="lista"></div>
+  </main>
+  <aside id="zgjedhja">
+    <h2>Zgjedhja ime (<span id="cnt">0</span>)</h2>
+    <div class="chips" id="chips"></div>
+    <label class="f">Çfarë do të bëjmë?</label>
+    <div class="radios" id="detyra">
+      <label><input type="radio" name="d" value="Hartë" checked><span>Hartë</span></label>
+      <label><input type="radio" name="d" value="Analizë gjeohapësinore"><span>Analizë</span></label>
+      <label><input type="radio" name="d" value="Hartë + analizë"><span>Të dyja</span></label>
+    </div>
+    <label class="f">Rezultati</label>
+    <select id="rez">
+      <option>Projekt QGIS (.qgz) + PNG</option>
+      <option>Hartë PDF për printim (A3)</option>
+      <option>Hartë PDF për printim (A4)</option>
+      <option>Vetëm projekt QGIS (.qgz)</option>
+      <option>Tabelë / statistika (Excel)</option>
+      <option>Shtresë e re (shapefile / GeoPackage)</option>
+    </select>
+    <label class="f">Përshkrimi (çfarë të tregojë harta / pyetja e analizës)</label>
+    <textarea id="pershk" rows="4" placeholder="p.sh. Cilat parcela komunale bien brenda brezit mbrojtës të rrugëve nacionale?"></textarea>
+    <div id="paralajm"></div>
+    <div style="margin-top:14px"><button class="primary" id="kopjo">Kopjo kërkesën për Claude</button></div>
+    <div class="ok" id="ok"></div>
+    <textarea class="out" id="out" readonly></textarea>
+  </aside>
+</div>
+<div class="mbar">
+  <span><span id="mcnt">0</span> layera të zgjedhur</span>
+  <button id="mshko">Vazhdo ↓</button>
+</div>
+<script>
+const K = {"dosja": "GIS_Gllogoc", "gjeneruar": "2026-10-22 11:36", "numri": 92, "layerat": [{"id": "AMF e propozuar_Drenas", "titulli": "AMF e propozuar_Drenas", "fajlli": "AMF e propozuar_Drenas.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 2, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "AMF_Gllogoc", "titulli": "AMF_Gllogoc", "fajlli": "AMF_Gllogoc.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 7, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Autostradat", "titulli": "Autostradat", "fajlli": "Autostradat.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "3D Line String", "objekte": 200, "fushat": ["Kodi", "Kodi2", "Gjatësia"], "crs": "WGS 84", "epsg": 4326, "statusi": "ok"}, {"id": "Banim i larte_HZK_Drenas", "titulli": "Banim i larte_HZK_Drenas", "fajlli": "Banim i larte_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "3D Polygon", "objekte": 43, "fushat": ["ID", "Sip___ha_"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Banim i mesem_HZK", "titulli": "Banim i mesem_HZK", "fajlli": "Banim i mesem_HZK.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 12, "fushat": ["Id", "Sip___ha_"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Banim i ulet_HZK_Drenas", "titulli": "Banim i ulet_HZK_Drenas", "fajlli": "Banim i ulet_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "3D Polygon", "objekte": 2118, "fushat": ["ID", "HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha", "Urban_rura", "Kategoria"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Boniteti_Gllogoc", "titulli": "Boniteti_Gllogoc", "fajlli": "Boniteti_Gllogoc.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "3D Polygon", "objekte": 6, "fushat": ["Municipali", "Municipal0", "Municipal1", "Municipal2", "Municipal3", "StateId", "sip", "Klasa_e_to", "Ndarja_1_4"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BR7CE1~1", "titulli": "BR7CE1~1", "fajlli": "BR7CE1~1.SHP", "tema": "Të tjera", "lloji": "vektor", "gjeometria": "?", "objekte": null, "fushat": [], "crs": "?", "epsg": null, "statusi": "i dëmtuar", "shenim": "Unable to open GIS_Gllogoc\\BR7CE1~1.shx or GIS_Gllogoc\\BR7CE1~1.SHX. Set SHAPE_RESTORE_SHX config option"}, {"id": "BRDB85~1", "titulli": "BRDB85~1", "fajlli": "BRDB85~1.SHP", "tema": "Të tjera", "lloji": "vektor", "gjeometria": "?", "objekte": null, "fushat": [], "crs": "?", "epsg": null, "statusi": "i dëmtuar", "shenim": "Unable to open GIS_Gllogoc\\BRDB85~1.shx or GIS_Gllogoc\\BRDB85~1.SHX. Set SHAPE_RESTORE_SHX config option"}, {"id": "Brezi mbrojtes I Autoudha 100m", "titulli": "Brezi mbrojtes I Autoudha 100m", "fajlli": "Brezi mbrojtes I Autoudha 100m.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Brezi mbrojtes I Hekurudha 6m", "titulli": "Brezi mbrojtes I Hekurudha 6m", "fajlli": "Brezi mbrojtes I Hekurudha 6m.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Brezi mbrojtes II Autoudha 40m", "titulli": "Brezi mbrojtes II Autoudha 40m", "fajlli": "Brezi mbrojtes II Autoudha 40m.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Brezi mbrojtes II Hekurudha 8m", "titulli": "Brezi mbrojtes II Hekurudha 8m", "fajlli": "Brezi mbrojtes II Hekurudha 8m.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BREZIM~1", "titulli": "Brezi mbojtes I rruga Nacionale 20 m", "fajlli": "BREZIM~1.SHP", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BREZIM~4", "titulli": "Brezi mbojtes I rruga Nacionale 60 m", "fajlli": "BREZIM~4.SHP", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BREZIR~1", "titulli": "Brezi rregullues I hekurudha 25 m", "fajlli": "BREZIR~1.SHP", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BREZIR~2", "titulli": "Brezi rregullues II hekurudha 100 m", "fajlli": "BREZIR~2.SHP", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BUFERA~1", "titulli": "Bufer Ambulancat 3 km finale", "fajlli": "BUFERA~1.SHP", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "BUFERQ~1", "titulli": "Bufer QMF 10 km", "fajlli": "BUFERQ~1.SHP", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Bujqesia_HZK_Drenas", "titulli": "Bujqesia_HZK_Drenas", "fajlli": "Bujqesia_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 18187, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "Sip___ha_", "Nënzona"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Burimet ujore", "titulli": "Burimet ujore", "fajlli": "Burimet ujore.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Point", "objekte": 5, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Energji e eres_Sankoc", "titulli": "Energji e eres_Sankoc", "fajlli": "Energji e eres_Sankoc.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["CadastreZ0", "Municipali", "Codi_settl"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Ferronikeli_Drenas", "titulli": "Ferronikeli_Drenas", "fajlli": "Ferronikeli_Drenas.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["gid", "object_id", "class", "code", "Sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Ferronikeli_point", "titulli": "Ferronikeli_point", "fajlli": "Ferronikeli_point.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "Point", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Gllogoc_Municipality_DEM", "titulli": "Gllogoc_Municipality_DEM", "fajlli": "Gllogoc_Municipality_DEM.tif", "tema": "Rasterë (DEM, relievi)", "lloji": "raster", "gjeometria": "810x768 px, 1 brez(a), rezolucion 22.83", "objekte": null, "fushat": [], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Gllogoc_Relievi_RGB_EPSG9141", "titulli": "Gllogoc_Relievi_RGB_EPSG9141", "fajlli": "Gllogoc_Relievi_RGB_EPSG9141.tif", "tema": "Rasterë (DEM, relievi)", "lloji": "raster", "gjeometria": "1849x2368 px, 4 brez(a), rezolucion 10.00", "objekte": null, "fushat": [], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Hekurudhat", "titulli": "Hekurudhat", "fajlli": "Hekurudhat.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "Line String", "objekte": 393, "fushat": ["name", "type", "Gjatësia"], "crs": "WGS 84", "epsg": 4326, "statusi": "ok"}, {"id": "Industri_HZK_Drenas", "titulli": "Industri_HZK_Drenas", "fajlli": "Industri_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 18, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha", "Lloji"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kategoria 1 rurale buffer", "titulli": "Kategoria 1 rurale buffer", "fajlli": "Kategoria 1 rurale buffer.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 7, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kategoria 1 urbane buffer", "titulli": "Kategoria 1 urbane buffer", "fajlli": "Kategoria 1 urbane buffer.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 4, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kategoria 2 rurale buffer", "titulli": "Kategoria 2 rurale buffer", "fajlli": "Kategoria 2 rurale buffer.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 63, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kategoria 2 urbane buffer", "titulli": "Kategoria 2 urbane buffer", "fajlli": "Kategoria 2 urbane buffer.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 14, "fushat": ["RoadNameAl", "Length", "BUFF_DIST"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kategoria 3 urbane buffer", "titulli": "Kategoria 3 urbane buffer", "fajlli": "Kategoria 3 urbane buffer.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 19, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kishe", "titulli": "Kishe", "fajlli": "Kishe.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 1, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Komasacioni_Drenas", "titulli": "Komasacioni_Drenas", "fajlli": "Komasacioni_Drenas.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["area", "perimeter", "Field03", "Field04", "BAICE Pa_1", "damanek _1", "FUSHTICE_1", "GLLOBAR _1", "GLLOGOC _1", "KISHNAREKA", "KISHNARE_1", "KOMARAN _1", "KORRETIC_1", "Krajkova_1", "LLAPUSHN_1", "NEKOC Pa_1", "POKLEK P_1", "QIKATOVE_1", "SANKOC Par", "SANKOC P_1", "Field01", "Field02", "SHTRUBULLO", "SHTRUBUL_1", "SHTRUBUL_2", "SHTRUBUL_3", "SHTRUBUL_4", "COUNT", "TERSTENI_1", "Field01_1", "VERBOVC _1", "ZABEL_I__1", "ZABEL_I_PO", "ZABEL_I__2", "ZABEL_I__3", "ZABEL_I__4", "SIP", "Area_1", "Sip___ha_"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "kos_rrjeti_i_ujitjes", "titulli": "kos_rrjeti_i_ujitjes", "fajlli": "kos_rrjeti_i_ujitjes.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Line String", "objekte": 213, "fushat": ["gid", "object_id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "kos_zonat_nen_sistem_te_ujitjes", "titulli": "kos_zonat_nen_sistem_te_ujitjes", "fajlli": "kos_zonat_nen_sistem_te_ujitjes.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 2, "fushat": ["gid", "object_id", "canal_name", "hydromodul", "kapac_kan", "kapkan_akt", "returnflow", "desi_area", "actuareair", "lumi_kapta"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kufiri i zones Klecke dhe Divjake", "titulli": "Kufiri i zones Klecke dhe Divjake", "fajlli": "Kufiri i zones Klecke dhe Divjake.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id", "Emri", "Kategoria", "Data"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kufiri i zones Klecke dhe Divjake_buffer 200m", "titulli": "Kufiri i zones Klecke dhe Divjake_buffer 200m", "fajlli": "Kufiri i zones Klecke dhe Divjake_buffer 200m.shp", "tema": "Brezat mbrojtës dhe buffer-at", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id", "Emri", "Kategoria", "Data", "BUFF_DIST", "ORIG_FID"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Kufiri komunal i Drenasit", "titulli": "Kufiri komunal i Drenasit", "fajlli": "Kufiri komunal i Drenasit.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Municipali", "Municipal0", "Municipal1", "Municipal2", "Municipal3", "StateId", "sip"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Largpercuesit me tension te larte_Drenas", "titulli": "Largpercuesit me tension te larte_Drenas", "fajlli": "Largpercuesit me tension te larte_Drenas.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "Line String", "objekte": 25, "fushat": ["Id", "Kapaciteti"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Largpercuesit_komplet_Drenas", "titulli": "Largpercuesit_komplet_Drenas", "fajlli": "Largpercuesit_komplet_Drenas.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "3D Line String", "objekte": 557, "fushat": ["OID_", "Name", "FolderPath", "SymbolID", "AltMode", "Base", "Clamped", "Extruded", "Snippet", "PopupInfo", "Shape_Leng"], "crs": "WGS 84", "epsg": 4326, "statusi": "ok"}, {"id": "Liqenet_Drenas", "titulli": "Liqenet_Drenas", "fajlli": "Liqenet_Drenas.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 6, "fushat": ["PSH_Name", "PSH_Area", "PSH_P_Land", "zona_kad", "CadastreUn", "CreationDa", "Calc_Area"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Liqeni i planifikuar i Verbocit", "titulli": "Liqeni i planifikuar i Verbocit", "fajlli": "Liqeni i planifikuar i Verbocit.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["sip"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Liqeni i Vasileves_Drenas", "titulli": "Liqeni i Vasileves_Drenas", "fajlli": "Liqeni i Vasileves_Drenas.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["PSH_Name", "PSH_Area", "PSH_P_Land", "zona_kad", "CadastreUn", "CreationDa", "Calc_Area"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Lokacion i ri per varreza te qytetit", "titulli": "Lokacion i ri per varreza te qytetit", "fajlli": "Lokacion i ri per varreza te qytetit.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["ParcelDeta", "CadastreUn", "CadastreZo", "CadastreZ0", "Area", "Status", "CreationDa", "Komuna", "Zona_Kadas", "Njesia_Kad", "Siperfaqja", "Shfrytezim", "Klasa_e_ci", "Emri", "Emri_Babes", "Mbiemri", "IDCode", "Statusi_Pr", "Tipi_Prone", "E_Drejta_n"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Lumejt_e_Kosoves", "titulli": "Lumejt_e_Kosoves", "fajlli": "Lumejt_e_Kosoves.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Line String", "objekte": 3070, "fushat": ["NAME", "RIVER_TYPE", "SOURCE_SEG", "Dry_up", "Type", "Gjatesia"], "crs": "MUNGON (.prj)", "epsg": null, "statusi": "pa .prj"}, {"id": "Miniere dhe gurore_HZK_Drenas", "titulli": "Miniere dhe gurore_HZK_Drenas", "fajlli": "Miniere dhe gurore_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 6, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha", "Lloji", "Tipi"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Ndertimi i akumulacionit te ujitjes_Drenas", "titulli": "Ndertimi i akumulacionit te ujitjes_Drenas", "fajlli": "Ndertimi i akumulacionit te ujitjes_Drenas.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Multi Point", "objekte": 1, "fushat": ["KOMUNës", "EMRAT_SHQI"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "OBJEKT~1", "titulli": "OBJEKT~1", "fajlli": "OBJEKT~1.SHP", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 1, "fushat": ["FS_ID", "FS_Name_A", "FS_Name_E", "Mun_Name_A", "Mun_Name_E", "Mun_Code", "City_Name_", "City_Name1", "FS_Type_Co", "FS_Type_La", "Northing", "Easting", "Accuracy"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "OFRIMI~1", "titulli": "OFRIMI~1", "fajlli": "OFRIMI~1.SHP", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Line String", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Parcelat e komasacionit_Drenas", "titulli": "Parcelat e komasacionit_Drenas", "fajlli": "Parcelat e komasacionit_Drenas.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 4572, "fushat": ["area", "perimeter", "Field03", "Field04", "BAICE Pa_1", "damanek _1", "FUSHTICE_1", "GLLOBAR _1", "GLLOGOC _1", "KISHNAREKA", "KISHNARE_1", "KOMARAN _1", "KORRETIC_1", "Krajkova_1", "LLAPUSHN_1", "NEKOC Pa_1", "POKLEK P_1", "QIKATOVE_1", "SANKOC Par", "SANKOC P_1", "Field01", "Field02", "SHTRUBULLO", "SHTRUBUL_1", "SHTRUBUL_2", "SHTRUBUL_3", "SHTRUBUL_4", "COUNT", "TERSTENI_1", "Field01_1", "VERBOVC _1", "ZABEL_I__1", "ZABEL_I_PO", "ZABEL_I__2", "ZABEL_I__3", "ZABEL_I__4", "SIP", "Area_1"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Parcelat_all_Drenas", "titulli": "Parcelat_all_Drenas", "fajlli": "Parcelat_all_Drenas.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 41421, "fushat": ["PSH_Name", "PSH_Area", "PSH_P_Land", "zona_kad", "CadastreUn", "CreationDa", "Calc_Area"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Pasuri_Komunale_Parcelat", "titulli": "Pasuri_Komunale_Parcelat", "fajlli": "Pasuri_Komunale_Parcelat.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 300, "fushat": ["PSH_Name", "PSH_Area", "PSH_P_Land", "zona_kad", "CadastreUn", "CreationDa", "Calc_Area"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Pronat_publike_Gllogoc", "titulli": "Pronat_publike_Gllogoc", "fajlli": "Pronat_publike_Gllogoc.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 4207, "fushat": ["ParcelDeta", "CadastreUn", "CadastreZo", "CadastreZ0", "Area", "Status", "CreationDa", "Komuna", "Zona_Kadas", "Njesia_Kad", "Siperfaqja", "Shfrytezim", "Klasa_e_ci", "Emri", "Emri_Babes", "Mbiemri", "IDCode", "Statusi_Pr", "Tipi_Prone", "E_Drejta_n"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Pyjet_HZK_Drenas", "titulli": "Pyjet_HZK_Drenas", "fajlli": "Pyjet_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 5621, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha", "Nenzona"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Qasja ne ujesjelles sipas vendbanimeve_Gllogoc", "titulli": "Qasja ne ujesjelles sipas vendbanimeve_Gllogoc", "fajlli": "Qasja ne ujesjelles sipas vendbanimeve_Gllogoc.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 35, "fushat": ["CadastreZ0", "Municipali", "Codi_settl", "Qasja_në"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "QKMF_Gllogoc", "titulli": "QKMF_Gllogoc", "fajlli": "QKMF_Gllogoc.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 1, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "QMF_Gllogoc", "titulli": "QMF_Gllogoc", "fajlli": "QMF_Gllogoc.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 5, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Rrjeti ekzistues i ujesjellesit_Drenas", "titulli": "Rrjeti ekzistues i ujesjellesit_Drenas", "fajlli": "Rrjeti ekzistues i ujesjellesit_Drenas.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "3D Line String", "objekte": 6768, "fushat": ["FID_", "Entity", "Layer", "Color", "Linetype", "Elevation", "LineWt", "RefName"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Rrjeti i komunikacionit_HZK_Drenas", "titulli": "Rrjeti i komunikacionit_HZK_Drenas", "fajlli": "Rrjeti i komunikacionit_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1998, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Rrjeti i planifikuar i ujesjellesit_Drenas", "titulli": "Rrjeti i planifikuar i ujesjellesit_Drenas", "fajlli": "Rrjeti i planifikuar i ujesjellesit_Drenas.shp", "tema": "Uji dhe ujitja", "lloji": "vektor", "gjeometria": "Line String", "objekte": 21, "fushat": ["Emri_i_Pro", "Kosto", "A", "B", "C", "Length"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Rruget nacionale", "titulli": "Rruget nacionale", "fajlli": "Rruget nacionale.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "3D Line String", "objekte": 577, "fushat": ["Kodi1", "Kodi2"], "crs": "WGS 84", "epsg": 4326, "statusi": "ok"}, {"id": "Rruget rajonale", "titulli": "Rruget rajonale", "fajlli": "Rruget rajonale.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "3D Line String", "objekte": 561, "fushat": ["Kodi1", "Kodi2"], "crs": "WGS 84", "epsg": 4326, "statusi": "ok"}, {"id": "Sherbim i komunitetit_HZK_Drenas", "titulli": "Sherbim i komunitetit_HZK_Drenas", "fajlli": "Sherbim i komunitetit_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 252, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Sherbim kulturor, argetues dhe rekreativ_HZK_Drenas", "titulli": "Sherbim kulturor, argetues dhe rekreativ_HZK_Drenas", "fajlli": "Sherbim kulturor, argetues dhe rekreativ_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 14, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Sherbim tregtar_HZK_Drenas", "titulli": "Sherbim tregtar_HZK_Drenas", "fajlli": "Sherbim tregtar_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1780, "fushat": ["HILUCS1", "KODI1", "HILUCS", "KODI2", "HILUCS3", "KODI3", "sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Shkollat e mesme Gllogoc", "titulli": "Shkollat e mesme Gllogoc", "fajlli": "Shkollat e mesme Gllogoc.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 2, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Shkollat fillore_Gllogoc", "titulli": "Shkollat fillore_Gllogoc", "fajlli": "Shkollat fillore_Gllogoc.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 34, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Shtrirja e rrjetit te ndricimit", "titulli": "Shtrirja e rrjetit te ndricimit", "fajlli": "Shtrirja e rrjetit te ndricimit.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "Point", "objekte": 3, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Siperfaqe ujore_HZK_Drenas", "titulli": "Siperfaqe ujore_HZK_Drenas", "fajlli": "Siperfaqe ujore_HZK_Drenas.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 229, "fushat": ["HILUCS1", "KODI1", "HILUCS2", "KODI2", "HILUCS3", "KODI3", "sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Stacionet e trenit dhe autobusave", "titulli": "Stacionet e trenit dhe autobusave", "fajlli": "Stacionet e trenit dhe autobusave.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "Point", "objekte": 6, "fushat": ["Id", "Vendbanimi", "Lloji"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "STACIO~1", "titulli": "STACIO~1", "fajlli": "STACIO~1.SHP", "tema": "Transporti", "lloji": "vektor", "gjeometria": "Point", "objekte": 6, "fushat": ["Id", "Vendbanimi", "Lloji"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Tipologjia_objektet_Drenas", "titulli": "Tipologjia_objektet_Drenas", "fajlli": "Tipologjia_objektet_Drenas.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 12, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Trafostacionet_komplet_Drenas", "titulli": "Trafostacionet_komplet_Drenas", "fajlli": "Trafostacionet_komplet_Drenas.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "3D Point", "objekte": 331, "fushat": ["OID_", "Name", "FolderPath", "SymbolID", "AltMode", "Base", "Snippet", "PopupInfo", "HasLabel", "LabelID", "Z"], "crs": "WGS 84", "epsg": 4326, "statusi": "ok"}, {"id": "Traseja nr .1 e tramvajit", "titulli": "Traseja nr .1 e tramvajit", "fajlli": "Traseja nr .1 e tramvajit.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "Line String", "objekte": 6, "fushat": ["Id", "Klasa_rrug", "Kateg_rrug", "Ref", "Emri_rruge", "Notes", "Buferi", "Gjatesia"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Traseja nr. 2 e tramvajit", "titulli": "Traseja nr. 2 e tramvajit", "fajlli": "Traseja nr. 2 e tramvajit.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "Line String", "objekte": 2, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Trashegimia arkeologjike HZK Drenas", "titulli": "Trashegimia arkeologjike HZK Drenas", "fajlli": "Trashegimia arkeologjike HZK Drenas.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Multi Point", "objekte": 7, "fushat": ["id_0", "object_id", "id", "emri", "komuna", "qytetfshat", "z_lartesia", "y_koor_utm", "x_koor_utm", "y_ksr", "x_ksr"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Trashegimia arkitekturore HZK Drenas", "titulli": "Trashegimia arkitekturore HZK Drenas", "fajlli": "Trashegimia arkitekturore HZK Drenas.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Multi Point", "objekte": 16, "fushat": ["id_0", "object_id", "id", "emri", "qytetfshat", "z_lartesia", "y_koor_utm", "x_koor_utm", "y_ksr", "x_ksr"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Trashegimia natyrore - Monumente me karakter botanik", "titulli": "Trashegimia natyrore - Monumente me karakter botanik", "fajlli": "Trashegimia natyrore - Monumente me karakter botanik.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Multi Point", "objekte": 6, "fushat": ["emri", "qytetfshat", "Nr_"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Trashegimia natyrore HZK Drenas", "titulli": "Trashegimia natyrore HZK Drenas", "fajlli": "Trashegimia natyrore HZK Drenas.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Point", "objekte": 6, "fushat": ["gid", "object_id", "code", "mon_name", "municap", "settlement", "location", "area", "inst_stat", "year_stat", "descripti"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Varrezat ne qytet qe duhet te konservohen_", "titulli": "Varrezat ne qytet qe duhet te konservohen_", "fajlli": "Varrezat ne qytet qe duhet te konservohen_.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 2, "fushat": ["id", "kategoria", "nen_katego", "PSH_Name", "PSH_Area", "PSH_P_Land", "zona_kad", "CadastreUn", "CreationDa", "Calc_Area", "Notes", "LU_Code1", "LU_Code2", "Sip", "sip_ha", "sip_ha_1"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Varrezat", "titulli": "Varrezat", "fajlli": "Varrezat.shp", "tema": "Trashëgimia dhe varrezat", "lloji": "vektor", "gjeometria": "Point", "objekte": 126, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Vendbanimet_Gllogoc", "titulli": "Vendbanimet_Gllogoc", "fajlli": "Vendbanimet_Gllogoc.shp", "tema": "Zonimi (HZK)", "lloji": "vektor", "gjeometria": "Multi Point", "objekte": 35, "fushat": ["KOMUNës", "VENDBANIMI", "EMRAT_SHQI", "EMRAT_SERB", "KodKom", "Kvend", "Emri", "M0_4", "M5_9", "M10_14", "M15_19", "M20_24", "M25_29", "M30_34", "M35_39", "M40_44", "M45_49", "M50_54", "M55_59", "M60_64", "M65_69", "M70_74", "M75_79", "80plus", "Gjithsej"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Vendndalesat e tramvajit", "titulli": "Vendndalesat e tramvajit", "fajlli": "Vendndalesat e tramvajit.shp", "tema": "Transporti", "lloji": "vektor", "gjeometria": "Point", "objekte": 4, "fushat": ["Id", "Emri"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Xhamite", "titulli": "Xhamite", "fajlli": "Xhamite.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 16, "fushat": ["id", "Tipologjia", "Notes", "Sip__ha_"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "ZGJERI~1", "titulli": "ZGJERI~1", "fajlli": "ZGJERI~1.SHP", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Point", "objekte": 2, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "ZIV Fusha e Mihjes së Re", "titulli": "ZIV Fusha e Mihjes së Re", "fajlli": "ZIV Fusha e Mihjes së Re.shp", "tema": "Energjia dhe industria", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id", "Emri", "Kategoria", "Data", "sip_ha"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Zona e boshtres_Drenas", "titulli": "Zona e boshtres_Drenas", "fajlli": "Zona e boshtres_Drenas.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 1, "fushat": ["Id"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Zonat kadastrale Drenas", "titulli": "Zonat kadastrale Drenas", "fajlli": "Zonat kadastrale Drenas.shp", "tema": "Kufijtë, kadastra dhe pronat", "lloji": "vektor", "gjeometria": "Polygon", "objekte": 35, "fushat": ["CadastreZ0", "Municipali", "Codi_settl", "VERIFIKIMI", "gllanasell"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Çerdhe e propozuar", "titulli": "Çerdhe e propozuar", "fajlli": "Çerdhe e propozuar.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Multi Point", "objekte": 6, "fushat": ["KOMUNës", "EMRAT_SHQI"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}, {"id": "Çerdhet_Gllogoc", "titulli": "Çerdhet_Gllogoc", "fajlli": "Çerdhet_Gllogoc.shp", "tema": "Shëndetësia, arsimi dhe objektet publike", "lloji": "vektor", "gjeometria": "Point", "objekte": 2, "fushat": ["id", "Tipologjia", "Notes"], "crs": "KOSOVAREF01 / Balkans zone 7", "epsg": 9141, "statusi": "ok"}]};
+const KEY = "katalogu-gllogoc-zgjedhja";
+let sel = new Set();
+try { sel = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch(e) {}
+const byId = Object.fromEntries(K.layerat.map(l => [l.id, l]));
+sel = new Set([...sel].filter(id => byId[id]));
+
+document.getElementById("sub").textContent =
+  `${K.numri} layera · përditësuar ${K.gjeneruar} · ${K.dosja}`;
+
+const geomSq = g => /Point/i.test(g) ? "Pikë" : /Line/i.test(g) ? "Linjë" : /Polygon/i.test(g) ? "Poligon" : g;
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...sel])); } catch(e) {} };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render() {
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const ft = document.getElementById("ft").value;
+  const open = new Set([...document.querySelectorAll("details[open]")].map(d => d.dataset.t));
+  const temat = {};
+  for (const l of K.layerat) {
+    const hay = (l.titulli + " " + l.fajlli + " " + l.tema).toLowerCase();
+    if (q && !hay.includes(q)) continue;
+    if (ft === "raster" ? l.lloji !== "raster" : ft && !(l.gjeometria || "").includes(ft)) continue;
+    (temat[l.tema] ||= []).push(l);
+  }
+  const html = Object.keys(temat).sort().map(t => {
+    const ls = temat[t].sort((a, b) => a.titulli.localeCompare(b.titulli, "sq"));
+    const n = ls.filter(l => sel.has(l.id)).length;
+    const rows = ls.map(l => {
+      const badges = [];
+      badges.push(`<span class="b">${esc(l.lloji === "raster" ? "Raster" : geomSq(l.gjeometria))}</span>`);
+      if (l.objekte != null) badges.push(`<span class="b">${l.objekte} obj.</span>`);
+      if (l.statusi === "pa .prj") badges.push(`<span class="b warn">pa .prj</span>`);
+      if (l.statusi === "i dëmtuar") badges.push(`<span class="b bad">i dëmtuar</span>`);
+      const crs = l.epsg ? `EPSG:${l.epsg}` : l.crs;
+      return `<div class="row ${sel.has(l.id) ? "sel" : ""}" data-id="${esc(l.id)}">
+        <input type="checkbox" ${sel.has(l.id) ? "checked" : ""} ${l.statusi === "i dëmtuar" ? "disabled" : ""}>
+        <div><div class="t">${esc(l.titulli)}</div>
+          <div class="meta">${esc(l.fajlli)} · ${esc(crs)}${l.shenim ? " · " + esc(l.shenim) : ""}</div></div>
+        <div class="badges">${badges.join("")}</div></div>`;
+    }).join("");
+    return `<details data-t="${esc(t)}" ${open.has(t) || q || ft ? "open" : ""}>
+      <summary><input type="checkbox" class="grp" ${n && n === ls.length ? "checked" : ""}> ${esc(t)}
+      <span class="n">${n ? n + " / " : ""}${ls.length}</span></summary>${rows}</details>`;
+  }).join("") || `<p class="empty">Asnjë layer nuk përputhet me kërkimin.</p>`;
+  document.getElementById("lista").innerHTML = html;
+  document.querySelectorAll("details").forEach(d => {
+    const g = d.querySelector(".grp"), rows = d.querySelectorAll(".row input:not(:disabled)");
+    const n = [...rows].filter(r => r.checked).length;
+    g.indeterminate = n > 0 && n < rows.length;
+  });
+  side();
+}
+
+function side() {
+  document.getElementById("cnt").textContent = sel.size;
+  document.getElementById("mcnt").textContent = sel.size;
+  const ls = [...sel].map(id => byId[id]);
+  document.getElementById("chips").innerHTML = ls.length
+    ? ls.map(l => `<span class="chip">${esc(l.titulli)} <b data-x="${esc(l.id)}" title="Hiqe">✕</b></span>`).join("")
+    : `<span class="empty">Zgjidh layerat me tik në listë.</span>`;
+  const crs = new Set(ls.map(l => l.epsg ? "EPSG:" + l.epsg : l.crs));
+  const w = [];
+  if (crs.size > 1) w.push(`Layerat janë në ${crs.size} sisteme koordinative (${[...crs].join(", ")}). Do t'i ripozicionoj të gjitha në KOSOVAREF01 (EPSG:9141).`);
+  const pa = ls.filter(l => l.statusi === "pa .prj");
+  if (pa.length) w.push(`Pa .prj: ${pa.map(l => l.titulli).join(", ")}.`);
+  document.getElementById("paralajm").innerHTML = w.map(x => `<div class="note">${esc(x)}</div>`).join("");
+}
+
+function kerkesa() {
+  const ls = [...sel].map(id => byId[id]);
+  const d = document.querySelector("input[name=d]:checked").value;
+  const lines = [
+    `Detyra: ${d}`,
+    `Rezultati: ${document.getElementById("rez").value}`,
+    `Dosja: ${K.dosja}`,
+    `Layerat (${ls.length}):`,
+    ...ls.map(l => `- ${l.titulli} | ${l.fajlli} | ${l.lloji === "raster" ? "raster" : geomSq(l.gjeometria) + ", " + l.objekte + " obj."} | ${l.epsg ? "EPSG:" + l.epsg : l.crs}`),
+  ];
+  const p = document.getElementById("pershk").value.trim();
+  if (p) lines.push(`Përshkrimi: ${p}`);
+  return lines.join("\n");
+}
+
+document.getElementById("lista").addEventListener("click", e => {
+  const g = e.target.closest(".grp");
+  if (g) {
+    e.stopPropagation();
+    const d = g.closest("details");
+    const ids = [...d.querySelectorAll(".row")].filter(r => !r.querySelector("input").disabled).map(r => r.dataset.id);
+    const all = ids.every(id => sel.has(id));
+    ids.forEach(id => all ? sel.delete(id) : sel.add(id));
+    d.open = true; save(); render(); return;
+  }
+  const r = e.target.closest(".row");
+  if (!r || r.querySelector("input").disabled) return;
+  if (e.target.tagName !== "INPUT") e.preventDefault();
+  sel.has(r.dataset.id) ? sel.delete(r.dataset.id) : sel.add(r.dataset.id);
+  save(); render();
+});
+document.getElementById("chips").addEventListener("click", e => {
+  if (e.target.dataset.x) { sel.delete(e.target.dataset.x); save(); render(); }
+});
+document.getElementById("q").addEventListener("input", render);
+document.getElementById("ft").addEventListener("change", render);
+document.getElementById("mshko").onclick = () => document.getElementById("zgjedhja").scrollIntoView();
+document.getElementById("pastro").onclick = () => { sel.clear(); save(); render(); };
+document.getElementById("hap").onclick = () => {
+  const ds = document.querySelectorAll("details"), all = [...ds].every(d => d.open);
+  ds.forEach(d => d.open = !all);
+};
+document.getElementById("kopjo").onclick = async () => {
+  const ok = document.getElementById("ok"), out = document.getElementById("out");
+  if (!sel.size) { ok.textContent = "Zgjidh të paktën një layer."; return; }
+  const t = kerkesa();
+  out.value = t;
+  try { await navigator.clipboard.writeText(t); ok.textContent = "U kopjua – ngjite (Ctrl+V) në bisedë me Claude."; out.style.display = "none"; }
+  catch (err) { out.style.display = "block"; out.select(); ok.textContent = "Kopjoje tekstin më poshtë (Ctrl+C)."; }
+};
+render();
+</script>
+</body></html>

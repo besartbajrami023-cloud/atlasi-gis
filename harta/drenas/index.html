@@ -1,0 +1,254 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Besart Bajrami GIS</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cartographer's sheet — hero splits name/readout (left) and a live municipal map (right); chapters alternate text and map plates on a grid with a margin rule */
+:root{
+  --paper:#eef1ee; --sheet:#f8faf8; --ink:#14212b; --muted:#56626a; --rule:#cdd5d2;
+  --ochre:#b9790f; --teal:#2b6b6e; --zone:#dfe7e3; --zone-hi:#f1d9a6;
+  --display:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  --body:'Public Sans',ui-sans-serif,system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0e161c; --sheet:#141e25; --ink:#e7ece9; --muted:#9aa7ad; --rule:#26343c;
+  --ochre:#e3a63c; --teal:#5fb1b2; --zone:#1b2830; --zone-hi:#4a3a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0e161c; --sheet:#141e25; --ink:#e7ece9; --muted:#9aa7ad; --rule:#26343c;
+  --ochre:#e3a63c; --teal:#5fb1b2; --zone:#1b2830; --zone-hi:#4a3a17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.02}
+:focus-visible{outline:2px solid var(--ochre);outline-offset:3px}
+
+/* nav */
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:22px;border-bottom:1px solid var(--rule)}
+nav .me{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em}
+nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav ul a{text-decoration:none;font-size:14px;color:var(--muted)} nav ul a:hover{color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center;padding-block:56px 40px}
+.hero h1{font-size:clamp(52px,8.4vw,112px);font-weight:800;letter-spacing:-.035em}
+.hero h1 span{display:block;color:var(--ochre)}
+.lede{font-size:clamp(18px,2vw,22px);max-width:30ch;margin:22px 0 0;color:var(--ink)}
+.role{margin-top:26px;display:grid;gap:6px}
+.readout{margin-top:34px;border:1px solid var(--rule);background:var(--sheet);padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;max-width:420px}
+.readout dt{color:var(--muted)} .readout dd{margin:0}
+.readout .zn{font-weight:500;color:var(--ochre)}
+.mapbox{position:relative}
+#hero-map{width:100%;height:auto;display:block;max-height:78vh}
+#hero-map .zone{fill:var(--zone);stroke:var(--sheet);stroke-width:1.6;transition:fill .2s;cursor:crosshair;opacity:0;animation:fadein .6s forwards}
+#hero-map .zone:hover,#hero-map .zone.on{fill:var(--zone-hi)}
+#hero-map .bnd{fill:none;stroke:var(--ink);stroke-width:3.2;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 2.6s ease-out forwards}
+#hero-map .dot{fill:var(--teal);fill-opacity:.85;stroke:var(--sheet);stroke-width:1.5;pointer-events:none;transform-box:fill-box;transform-origin:center;opacity:0;animation:pop .5s forwards}
+#hero-map .grat{stroke:var(--rule);stroke-width:1;stroke-dasharray:2 6}
+#hero-map .glab{fill:var(--muted);font-family:var(--mono);font-size:13px}
+.northlab{position:absolute;right:4px;top:4px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center;line-height:1.1}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadein{to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){#hero-map .bnd{stroke-dashoffset:0;animation:none}#hero-map .zone,#hero-map .dot{opacity:1;animation:none}}
+
+/* figures strip */
+.figs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--rule);margin-block:24px 0}
+.figs div{padding:22px 18px;border-left:1px solid var(--rule);display:grid;gap:4px}
+.figs div:first-child{border-left:0;padding-left:0}
+.figs b{font-family:var(--display);font-size:clamp(28px,3.4vw,42px);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* chapters */
+section{padding-block:72px 8px}
+.sec-head{display:grid;gap:10px;margin-bottom:36px;max-width:60ch}
+.sec-head h2{font-size:clamp(34px,4.6vw,56px);font-weight:800;letter-spacing:-.025em}
+.sec-head p{margin:0;color:var(--muted)}
+.chapters{display:grid;gap:64px}
+.ch{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:40px;align-items:start;padding-top:28px;border-top:1px solid var(--rule)}
+.ch:nth-child(even){grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr)}
+.ch:nth-child(even) .txt{order:2}
+.txt{display:grid;gap:14px;min-width:0;position:sticky;top:24px}
+.txt .no{font-family:var(--mono);font-size:13px;color:var(--ochre)}
+.txt h3{font-size:clamp(25px,2.6vw,32px);font-weight:700;letter-spacing:-.015em}
+.txt p{margin:0;max-width:52ch}
+.txt ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.key{font-family:var(--display);font-size:44px;font-weight:800;color:var(--teal);line-height:1;letter-spacing:-.02em}
+.plate{margin:0;display:grid;gap:8px;min-width:0}
+.plate button{all:unset;cursor:zoom-in;display:block;border:1px solid var(--rule);background:#fff}
+.plate img{display:block;width:100%;height:auto}
+.plate figcaption{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
+.about p{margin:0 0 14px;max-width:58ch}
+.skills{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.skills li{border:1px solid var(--rule);background:var(--sheet);padding:6px 12px;font-size:14px}
+.method{background:var(--sheet);border:1px solid var(--rule);padding:22px 24px;display:grid;gap:10px}
+.method dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px}
+.method dt{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.method dd{margin:0;min-width:0}
+
+/* contact */
+.contact{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:18px}
+.mail{font-family:var(--mono);font-size:clamp(15px,2.4vw,22px);user-select:all;word-break:break-all}
+.btn{font:600 14px var(--body);border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 16px;cursor:pointer}
+footer{margin-top:80px;padding-block:24px 40px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* lightbox */
+#lb{position:fixed;inset:0;background:rgba(8,14,18,.92);z-index:50;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));cursor:zoom-out}
+#lb[hidden]{display:none}
+#lb img{max-width:100%;max-height:100%;background:#fff}
+
+@media (max-width:860px){
+  .hero,.about{grid-template-columns:1fr;gap:32px}
+  .ch,.ch:nth-child(even){grid-template-columns:1fr;gap:20px}
+  .ch:nth-child(even) .txt{order:0}
+  .txt{position:static}
+  .figs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .figs div:nth-child(3){border-left:0;padding-left:0}
+  .figs div:nth-child(n+3){border-top:1px solid var(--rule)}
+  nav ul{display:none}
+}
+</style>
+
+<div class="wrap">
+<nav aria-label="Navigimi">
+  <div class="me">Besart Bajrami</div>
+  <ul><li><a href="#harta">Kapitujt</a></li><li><a href="#rreth">Rreth meje</a></li><li><a href="#kontakt">Kontakt</a></li></ul>
+</nav>
+
+<header class="hero">
+  <div>
+    <div class="mono">MSc · GIS Specialist · Drenas, Kosovë</div>
+    <h1>Besart<span>Bajrami</span></h1>
+    <p class="lede">Dhjetë vjet duke e lexuar Drenasin përmes hartave: zona, parcela, rrugë, ujë dhe njerëz.</p>
+    <dl class="readout" aria-live="polite">
+      <dt>Zona</dt><dd class="zn" id="r-zone">Kaloni mbi hartë</dd>
+      <dt>Banorë</dt><dd id="r-pop">58.531 gjithsej</dd>
+      <dt>E (m)</dt><dd id="r-e">7.489.000</dd>
+      <dt>N (m)</dt><dd id="r-n">4.719.700</dd>
+      <dt>CRS</dt><dd>KOSOVAREF01 / TM</dd>
+    </dl>
+  </div>
+  <div class="mapbox">
+    <svg id="hero-map" role="img" aria-label="Harta e Komunës së Drenasit me 35 zonat kadastrale dhe vendbanimet"></svg>
+    <div class="northlab" aria-hidden="true">▲<br>V</div>
+  </div>
+</header>
+
+<div class="figs">
+  <div><b>27.563</b><span class="mono">hektarë territor</span></div>
+  <div><b>35</b><span class="mono">zona kadastrale</span></div>
+  <div><b>58.531</b><span class="mono">banorë në shtresë</span></div>
+  <div><b>9</b><span class="mono">harta tematike</span></div>
+</div>
+
+<section id="harta">
+  <div class="sec-head">
+    <div class="mono">Story map · 9 kapituj</div>
+    <h2>Drenasi në nëntë harta</h2>
+    <p>Secila hartë është ndërtuar me kod nga shtresat zyrtare të Hartës Zonale të Komunës. Klikoni mbi hartë për ta parë në madhësi të plotë.</p>
+  </div>
+  <div class="chapters" id="chapters"></div>
+</section>
+
+<section id="rreth">
+  <div class="about">
+    <div>
+      <div class="sec-head" style="margin-bottom:20px"><div class="mono">Rreth meje</div><h2>Planifikim me të dhëna</h2></div>
+      <p>Jam zyrtar i lartë për GIS në Drejtorinë për Planifikim Urban dhe Mbrojtje të Mjedisit në Drenas, me dhjetë vjet përvojë në hartografi, analizë hapësinore dhe dokumente të planifikimit.</p>
+      <p>Punoj me Hartën Zonale të Komunës, Planet Rregulluese të Hollësishme, kadastrën dhe infrastrukturën, dhe i kthej këto të dhëna në harta e analiza që ndihmojnë vendimmarrjen.</p>
+      <ul class="skills" aria-label="Aftësi">
+        <li>QGIS</li><li>Python · GeoPandas · Shapely</li><li>Analizë hapësinore</li><li>HZK · PZHK · PRrH</li><li>Kadastër dhe parcelizim</li><li>Hartografi zyrtare</li><li>KOSOVAREF01</li>
+      </ul>
+    </div>
+    <div class="method">
+      <div class="mono">Metodologjia e këtij atlasi</div>
+      <dl>
+        <dt>Burimi</dt><dd>Komuna e Drenasit – HZK/PZHK, shtresat GIS_Gllogoc</dd>
+        <dt>Projeksioni</dt><dd>KOSOVAREF01 / TM (EPSG:3045); rrugët, largpërçuesit dhe trafostacionet u riprojektuan nga WGS84</dd>
+        <dt>Sipërfaqet</dt><dd>Llogaritur nga gjeometria e poligoneve, m² → ha</dd>
+        <dt>Distancat</dt><dd>Mbulueshmëria e shkollave: distancë ajrore 1,5 km nga pika e vendbanimit</dd>
+        <dt>Kufizime</dt><dd>Hartat janë informative; për qëllime ligjore vlejnë dokumentet zyrtare të planifikimit.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="kontakt">
+  <div class="sec-head" style="margin-bottom:0"><div class="mono">Kontakt</div><h2>Keni nevojë për një hartë apo analizë?</h2></div>
+  <div class="contact">
+    <span class="mail" id="mail">besartbajrami023@gmail.com</span>
+    <button class="btn" id="copy" type="button">Kopjo adresën</button>
+  </div>
+</section>
+
+<footer><span class="mono">© 2026 MSc. Besart Bajrami, GIS Specialist</span><span class="mono">Drenas · 42.62° V · 20.89° L</span></footer>
+</div>
+
+<div id="lb" hidden><img id="lbimg" alt=""></div>
+
+<script>
+const GEO = {"w":781,"h":1000,"b":["171,287 172,294 177,300 177,304 186,299 180,296 182,294 180,291 181,290 173,287 174,283 183,277 188,282 198,272 204,274 204,270 208,271 212,263 214,263 215,259 218,260 222,257 217,254 214,248 209,245 206,238 200,216 198,212 194,193 191,189 195,175 185,167 187,161 194,150 199,154 204,151 216,150 225,145 229,137 241,140 244,136 264,135 261,120 265,121 268,119 264,108 266,106 270,110 278,101 277,99 280,97 285,91 291,91 302,82 306,87 309,88 310,87 313,91 317,94 319,93 333,105 336,111 340,106 340,104 344,103 348,99 362,99 367,103 368,110 377,118 377,120 375,123 376,129 378,129 380,127 382,128 379,133 379,135 382,136 381,142 384,148 385,152 394,151 400,154 406,167 409,168 411,172 411,178 414,184 426,173 430,165 434,162 451,122 453,122 456,108 463,99 470,101 471,98 473,97 474,90 479,89 479,87 484,85 489,77 490,77 495,73 505,56 509,52 512,45 518,42 518,37 519,33 522,33 524,39 533,46 554,55 565,54 592,40 614,23 619,18 623,9 631,3 632,0 635,0 642,7 644,13 646,24 649,32 650,40 647,50 651,57 662,70 675,78 681,81 682,84 691,87 703,98 705,104 709,106 716,117 719,135 723,139 729,140 704,161 696,163 693,174 693,181 697,189 691,205 700,255 713,289 717,296 722,318 723,324 720,334 720,340 722,351 727,353 728,358 723,369 724,373 729,376 730,381 741,393 755,415 756,417 763,417 777,426 781,436 762,479 745,500 736,507 729,517 729,523 733,534 732,545 737,552 738,555 728,562 719,573 712,576 710,583 716,587 741,594 756,596 759,624 764,637 759,650 762,677 761,697 751,721 732,717 720,727 712,736 693,747 685,757 675,761 676,762 674,763 682,776 677,778 679,782 675,783 674,786 668,793 666,796 666,800 668,806 681,805 682,810 684,809 687,812 693,823 695,836 694,838 699,845 680,855 657,875 659,884 654,891 643,894 640,891 636,891 631,887 625,888 612,882 606,885 600,876 596,873 595,869 592,864 554,863 554,865 551,866 549,876 553,889 550,899 551,904 553,904 551,908 552,914 535,917 536,923 533,924 532,919 528,919 526,914 501,926 495,932 465,970 436,995 426,1000 420,994 416,992 416,991 420,984 432,972 430,967 423,966 409,960 405,960 404,965 394,958 397,957 381,932 356,878 337,870 335,868 333,857 323,833 319,834 313,839 308,841 307,861 309,875 306,878 310,904 297,904 271,891 231,895 221,901 199,895 186,896 183,894 165,907 158,914 152,902 148,880 145,852 146,843 149,835 147,830 149,829 150,821 154,814 151,805 155,792 153,773 154,771 152,764 161,750 163,741 159,733 139,715 118,710 116,711 111,709 108,702 108,693 107,690 99,682 101,660 108,646 120,645 130,640 133,611 139,593 142,591 140,587 136,585 129,571 120,562 114,562 93,545 75,542 64,545 57,545 47,549 41,540 33,548 28,549 19,550 15,552 9,550 4,553 0,553 23,539 23,533 26,525 29,525 31,522 29,513 32,507 28,502 29,486 27,483 27,476 20,470 21,458 17,454 20,435 19,432 21,429 21,426 23,425 23,421 25,418 27,405 35,394 29,388 35,386 42,378 52,361 53,356 51,350 52,344 48,342 46,337 43,338 40,333 42,330 36,317 37,312 39,310 37,304 41,301 46,300 55,301 60,304 78,303 87,306 94,305 98,301 113,295 120,286 124,288 132,280 141,278 145,278 141,283 143,284 142,286 143,287 139,293 145,301 149,299 152,292 156,281 166,287 171,287"],"z":[["Llapushnik",["437,683 435,684 435,693 429,705 414,723 419,731 391,752 376,759 365,768 364,773 359,777 355,776 355,786 351,787 346,798 336,798 319,804 312,811 309,817 304,815 301,821 292,816 293,808 284,795 287,791 273,774 268,764 266,750 257,732 271,723 269,722 271,720 262,718 260,711 264,710 255,655 259,629 269,617 292,628 297,628 320,621 324,618 339,619 366,610 381,625 403,623 430,628 433,625 430,628 433,635 432,638 438,638 446,631 449,634 449,640 451,641 450,643 455,640 454,645 457,648 451,656 453,672 437,683"]],["Negroc",["258,669 261,696 264,710 247,715 243,714 241,724 233,724 231,729 202,735 172,745 162,741 159,733 139,715 118,710 116,711 111,709 108,702 107,690 99,682 101,660 108,646 120,645 130,640 133,611 139,593 142,591 155,599 156,598 179,617 185,612 190,612 193,614 199,614 203,620 211,620 227,612 232,604 234,607 237,606 235,600 262,590 268,590 271,601 270,617 259,629 257,637 255,655 258,669"]],["Arllat",["292,815 301,821 305,815 309,817 305,825 308,837 307,861 309,875 306,878 310,904 297,904 271,891 231,895 221,901 199,895 183,894 158,914 152,902 148,880 145,852 149,835 147,830 149,829 150,821 154,814 151,805 155,792 152,764 161,750 162,741 172,745 202,735 231,729 233,724 241,724 243,714 260,711 262,718 271,720 269,722 271,723 257,732 266,750 268,764 273,774 287,791 284,795 293,808 292,815"]],["Korroticë e Epërme",["738,555 719,573 712,576 709,584 696,579 687,593 676,605 666,605 662,597 649,595 622,600 619,593 604,597 596,595 589,601 564,600 537,590 529,591 528,575 521,574 519,571 523,560 552,554 598,521 614,519 620,511 639,507 650,501 654,502 658,495 666,499 672,498 685,506 702,502 717,509 734,509 729,517 729,523 733,533 732,545 738,555"]],["Fushticë e Epërme",["732,717 712,736 693,747 685,757 674,763 682,776 677,778 679,782 675,783 668,793 666,800 668,806 681,805 682,810 684,809 687,812 693,823 694,838 699,845 680,855 657,875 656,866 646,849 630,833 623,833 621,827 608,805 610,801 602,800 606,796 609,788 605,772 611,780 620,766 624,768 626,766 627,763 625,760 633,749 640,747 659,747 676,738 699,712 732,717"]],["Zabel i Epërm",["625,635 628,638 625,641 629,643 629,649 614,650 597,661 592,653 579,662 586,671 586,678 580,692 571,697 538,696 516,684 529,663 525,659 518,644 560,615 575,621 590,619 621,631 625,635"]],["Korroticë e Poshtme",["547,555 525,559 520,566 520,573 528,575 529,591 504,584 502,586 474,585 438,578 436,575 437,569 434,568 434,564 445,552 442,550 443,548 447,547 443,540 437,537 441,535 444,527 449,523 446,520 451,522 451,519 453,520 455,512 460,514 462,509 469,517 471,520 467,524 466,529 469,532 520,543 527,529 547,522 557,515 568,523 588,504 599,500 607,491 619,492 627,497 633,498 649,494 658,495 654,502 650,501 639,507 620,511 614,519 598,521 578,533 558,550 547,555"]],["Fushticë e Poshtme",["616,819 621,827 623,833 630,833 632,837 639,840 656,866 659,884 654,891 645,894 636,891 631,887 621,887 612,882 606,885 596,873 592,864 556,863 551,866 550,869 543,873 540,866 538,866 538,855 534,850 536,845 526,840 527,838 518,835 520,834 517,831 519,829 515,828 516,823 511,814 515,804 520,804 519,789 542,779 583,751 583,759 588,762 599,758 599,766 605,772 609,785 606,796 602,800 610,801 608,805 616,819"]],["Zabel i Poshtëm",["575,605 522,641 515,639 503,646 501,644 500,646 495,645 480,654 480,656 452,666 451,656 457,648 454,645 455,640 450,643 451,641 449,640 449,634 446,631 438,638 432,638 433,635 430,628 433,625 416,605 418,603 412,595 409,598 400,589 413,586 420,580 432,577 433,574 438,578 474,585 502,586 503,584 529,591 537,590 564,600 581,600 575,605"]],["Kishnarekë",["450,834 428,853 419,858 390,891 369,906 356,878 335,868 333,857 323,833 347,831 352,827 364,826 371,824 380,811 385,810 392,805 398,792 432,776 442,774 454,765 458,768 467,759 498,744 500,752 506,753 504,759 507,763 501,766 500,773 496,772 500,781 504,781 500,785 500,791 507,794 508,802 502,800 496,801 494,803 496,810 486,813 487,820 481,822 472,821 460,830 454,832 452,830 450,834"]],["Komoran",["388,808 380,811 372,823 365,826 352,827 340,832 327,832 308,841 305,825 312,811 322,802 336,798 346,798 351,787 355,786 355,776 359,777 364,773 365,768 376,759 391,752 419,731 414,723 429,705 435,693 435,684 452,674 453,666 480,656 480,654 495,645 500,646 501,644 503,646 515,639 522,641 517,646 525,659 529,663 516,684 538,696 567,695 582,728 584,736 583,751 542,779 519,789 520,804 516,804 513,809 509,806 506,808 507,794 500,791 500,785 504,781 500,781 496,772 500,773 501,766 507,763 504,759 506,753 500,752 498,744 467,759 458,768 454,765 442,774 432,776 399,792 392,805 388,808"]],["Nekoc",["550,898 551,904 553,904 551,908 552,914 535,917 536,923 533,924 532,919 528,919 526,914 501,926 465,970 426,1000 416,991 420,984 432,972 430,967 423,966 409,960 405,960 404,965 394,958 397,957 381,932 369,906 390,891 419,858 439,845 446,836 447,837 450,835 449,832 453,829 454,832 460,830 472,821 481,822 487,820 486,813 496,810 494,803 502,800 508,803 506,808 509,806 513,809 513,807 511,814 516,823 515,828 519,829 517,831 520,834 518,835 527,838 526,840 536,845 534,850 538,855 538,866 540,866 543,873 550,869 550,879 553,891 550,898"]],["Sankoc",["761,658 761,697 751,721 699,712 676,738 659,747 640,747 633,749 625,760 627,763 626,766 624,768 620,766 611,780 599,766 599,757 588,762 583,759 583,735 567,698 580,692 586,678 586,671 579,662 592,653 597,661 614,650 629,649 629,643 625,641 628,638 621,631 590,619 575,621 560,615 582,600 589,601 596,595 604,597 615,593 619,593 622,600 649,595 662,597 666,605 676,605 687,593 696,579 698,579 724,590 743,595 756,596 759,624 764,637 759,648 761,658"]],["Baicë",["353,448 341,456 325,462 289,488 285,494 263,505 259,514 258,523 265,545 237,550 221,548 194,528 190,507 192,494 183,478 179,460 161,443 152,428 162,402 188,401 189,403 204,403 221,408 226,403 227,396 239,392 243,391 258,396 272,386 279,393 291,395 307,384 315,385 324,382 338,389 344,387 344,393 353,395 354,397 349,398 352,402 351,407 352,411 357,413 356,417 358,423 362,426 364,423 365,426 370,426 370,431 359,445 353,448"]],["Vasilevë",["777,426 781,436 765,473 756,488 745,500 732,510 717,509 702,502 685,506 672,498 666,499 649,494 633,498 627,497 620,492 608,471 613,466 607,454 588,457 589,454 585,450 578,448 584,434 577,413 579,408 575,403 596,390 609,390 626,401 634,412 656,414 677,403 686,401 691,395 700,397 708,394 714,399 721,400 731,388 733,391 740,391 756,417 763,417 777,426"]],["Vërboc",["417,202 422,208 425,214 431,249 436,260 395,279 360,284 339,294 331,291 321,270 304,254 293,230 292,220 287,218 284,209 292,203 298,186 321,170 362,163 375,159 389,151 397,152 406,167 409,168 415,186 415,198 417,202"]],["Vuçak",["267,572 268,590 262,590 235,600 237,606 234,607 232,604 225,613 211,620 207,620 203,620 199,614 193,614 190,612 185,612 179,617 156,598 155,599 151,596 144,594 121,562 141,553 155,556 166,553 167,540 182,531 186,524 190,523 221,548 237,550 265,545 267,572"]],["Gllanasellë",["578,220 589,235 609,245 584,277 580,275 576,292 566,294 563,302 561,302 555,306 552,302 544,305 519,289 514,287 505,288 503,281 499,277 478,265 459,258 448,249 440,253 436,260 431,249 425,214 422,208 415,200 414,184 432,171 469,154 543,149 547,177 560,197 571,194 569,191 574,185 587,195 574,215 578,220"]],["Gllobar",["427,349 428,354 422,376 425,382 414,387 419,399 406,408 398,421 398,425 386,424 386,426 390,426 390,429 388,443 387,444 382,441 383,437 375,439 370,431 370,426 365,426 364,423 362,426 358,423 356,417 357,413 351,409 352,402 349,398 354,397 353,395 344,393 344,387 338,389 337,387 350,372 352,374 358,364 371,355 376,328 382,327 373,303 384,301 390,295 428,276 436,260 445,286 442,295 443,301 437,311 442,315 440,328 435,328 437,334 421,340 427,344 427,349"]],["Gllogoc",["502,451 504,456 501,458 502,462 497,469 495,484 485,493 482,500 474,501 475,505 469,505 462,509 462,504 455,504 454,496 451,494 445,495 439,490 427,489 423,486 421,473 428,465 424,460 431,458 439,448 423,435 429,424 447,434 452,420 474,403 485,402 500,408 504,407 519,385 540,401 526,411 510,409 505,411 501,416 499,430 501,431 512,429 511,442 506,449 502,449 502,451"]],["Gradicë",["704,100 716,117 719,135 723,139 729,140 704,161 696,163 693,179 697,189 687,199 682,197 678,191 664,187 650,178 636,158 596,179 591,185 587,195 574,185 569,191 571,194 560,197 547,177 543,148 545,134 534,117 537,96 559,60 565,54 592,40 614,23 623,9 631,3 632,0 635,0 639,4 644,13 646,24 649,32 647,50 651,58 662,70 681,81 682,84 691,87 704,100"]],["Abri e Epërme",["144,280 141,283 143,284 142,286 143,287 139,293 145,301 149,299 156,281 166,287 171,288 178,307 170,315 162,314 154,328 175,350 180,373 182,402 162,402 152,428 161,443 174,455 160,465 152,455 139,450 124,450 118,446 112,436 100,434 94,437 91,442 78,447 74,442 71,460 68,462 64,455 58,458 57,464 60,468 57,470 52,468 51,476 41,482 37,489 29,490 27,476 19,468 21,458 17,453 19,432 21,426 23,425 27,405 35,394 29,388 42,378 53,356 52,344 48,342 46,337 43,338 40,333 42,330 36,317 37,312 39,310 37,304 46,300 55,301 60,304 78,303 87,306 94,305 113,295 120,286 124,288 132,280 141,278 145,278 144,280"]],["Godanc",["691,205 695,229 681,237 660,232 643,241 632,241 619,246 609,245 589,235 574,215 585,200 591,185 596,179 636,158 650,178 664,187 678,191 684,198 687,199 697,189 691,205"]],["Dobroshec",["723,323 720,340 722,351 727,353 728,358 723,371 738,390 733,391 730,388 719,401 708,394 700,397 691,395 686,401 677,403 656,414 634,412 626,401 609,390 599,391 592,388 587,378 576,372 561,360 559,353 555,352 553,335 556,321 549,318 552,315 556,317 555,306 561,302 563,302 566,294 576,292 580,275 584,277 601,258 609,245 619,246 632,241 643,241 660,232 679,237 695,229 700,255 717,296 723,323"]],["Domanek",["357,509 357,517 353,522 343,521 324,535 304,540 303,535 300,537 297,531 283,542 265,547 258,523 259,514 263,505 285,494 289,488 325,462 341,456 359,445 370,431 374,436 371,459 352,471 352,475 355,480 353,482 330,497 343,505 357,509"]],["Krajkovë",["421,609 433,625 430,628 403,623 381,625 366,610 339,619 328,617 309,625 292,628 270,617 271,601 268,591 265,547 283,542 297,531 300,537 303,535 304,540 318,537 333,529 343,521 353,522 357,517 393,544 405,544 428,553 437,569 436,575 433,574 427,579 424,578 413,586 400,589 409,598 412,595 418,603 416,605 421,609"]],["Likoshan",["543,129 545,134 543,149 469,154 422,177 434,162 442,148 453,122 456,108 463,99 470,101 474,90 479,89 479,87 484,85 489,77 495,73 512,45 518,42 519,33 522,33 524,39 533,46 554,55 565,54 559,60 536,98 534,117 543,129"]],["Çikatovë e Re",["453,419 447,434 429,424 423,435 439,448 431,458 424,460 428,465 426,468 419,474 415,471 413,466 404,471 399,471 388,485 388,491 385,491 386,494 377,508 353,509 330,497 353,482 355,480 352,475 352,471 371,459 374,436 377,440 383,437 382,441 387,444 390,433 390,426 386,426 386,424 398,425 398,421 406,408 419,399 414,387 425,382 422,376 428,354 427,344 421,340 437,334 435,328 440,328 440,333 445,330 453,347 459,349 456,355 465,359 464,367 484,359 500,368 519,385 504,407 500,408 490,403 477,402 469,405 453,419"]],["Poklek",["609,458 613,466 608,471 620,492 607,491 599,500 588,504 568,523 557,515 547,522 527,529 520,543 493,536 486,537 469,532 466,529 467,524 471,520 462,509 469,505 475,505 475,501 482,500 485,493 495,484 497,469 502,462 501,458 504,455 502,449 506,449 511,442 512,429 501,431 499,429 501,416 506,410 526,411 535,403 572,401 579,408 577,413 584,434 578,448 585,450 589,454 588,457 607,454 609,458"]],["Polluzhë",["269,178 272,192 253,208 257,215 258,219 256,220 259,225 266,230 258,235 259,250 244,255 244,251 236,254 233,249 228,251 230,255 225,260 217,254 214,248 209,245 207,241 198,212 194,193 191,189 195,175 185,167 187,161 194,150 199,154 216,150 225,145 229,137 241,140 244,136 264,135 267,152 275,153 273,168 268,175 269,178"]],["Çikatovë e Vjetër",["494,274 503,280 505,288 514,287 519,289 544,305 553,303 556,317 552,315 549,318 556,321 553,335 555,352 559,353 561,360 576,372 587,378 592,388 596,390 575,403 572,401 540,402 535,396 522,387 503,370 485,360 464,367 465,359 456,355 459,349 453,347 449,335 445,330 440,333 442,315 437,311 443,301 442,295 445,286 436,260 440,253 448,249 459,258 478,265 494,274"]],["Tërdec",["192,494 190,507 193,523 186,524 183,531 167,540 165,554 151,556 141,553 121,562 114,562 93,545 75,542 57,545 47,549 41,540 28,549 15,552 9,550 0,553 23,539 26,525 30,523 29,513 32,507 28,503 29,490 37,489 41,482 51,476 52,468 57,470 60,468 57,464 58,458 64,455 68,462 71,460 74,442 78,447 91,442 94,437 100,434 112,436 118,446 124,450 139,450 152,455 160,465 165,459 174,455 179,460 185,483 192,494"]],["Tërstenik",["182,402 180,374 176,352 154,328 162,314 170,315 176,310 177,304 186,299 180,296 181,290 173,287 175,282 183,277 188,282 198,272 204,274 204,270 208,271 215,259 222,257 226,260 230,255 228,251 233,249 236,254 244,251 244,255 259,250 258,235 266,230 259,225 256,220 258,219 257,215 253,208 272,192 269,178 281,179 286,188 292,184 292,186 297,183 298,184 292,203 284,209 287,218 292,220 293,230 304,254 321,270 324,280 332,292 339,294 360,284 395,279 436,260 428,276 390,295 384,301 373,303 382,327 376,328 371,355 358,364 352,374 350,372 337,387 334,388 324,382 315,385 308,384 291,395 279,393 272,386 258,396 242,391 227,396 226,403 221,408 204,403 189,403 188,401 182,402"]],["Shtrubullovë",["446,520 449,523 444,527 441,535 437,537 445,542 447,548 444,547 442,550 445,552 434,564 428,553 421,549 405,544 393,544 391,541 381,536 357,517 357,509 377,508 386,494 385,491 388,491 388,485 399,472 404,471 413,466 416,472 422,475 423,486 427,489 439,490 445,495 451,494 454,496 453,501 455,504 462,504 462,509 460,513 455,512 453,520 451,519 451,522 446,520"]],["Shtuticë",["379,135 382,136 381,142 386,152 376,159 350,166 333,167 321,170 301,185 299,185 297,183 286,188 281,179 269,178 268,175 273,168 275,153 267,152 261,120 265,121 268,119 264,107 266,106 270,110 278,101 277,99 285,91 291,91 302,82 317,94 319,93 333,105 336,111 340,104 348,99 362,99 367,103 368,110 377,118 376,129 382,128 379,135"]]],"v":[["Baicë",269,457,2307],["Dobrashec",659,312,1457],["Domanek",321,511,706],["Fushticë e Ulët",577,810,1066],["Korroticë e Poshtme",482,559,972],["Zabel i Ulët",460,632,1077],["Gllanasellë",526,267,1591],["Gllobar",380,364,1526],["Godanc",609,204,358],["Fushticë e Epërme",649,776,984],["Korroticë e Epërme",607,561,1240],["Abri e Epërme",100,415,1776],["Zabel i Epërm",555,668,565],["Gradicë",658,130,842],["Kishnarekë",435,810,1504],["Komoran",494,669,4393],["Krajkovë",315,560,1181],["Llapushnik",331,693,3433],["Likoshan",499,99,600],["Negroc",208,639,1540],["Nekoc",482,891,3118],["Cikatovë e Re",422,435,2026],["Arllat",259,806,3134],["Poklek",542,443,1967],["Polluzhë",241,158,1017],["Sankoc",608,716,1437],["Cikatovë e Vjetër",510,318,1261],["Shtrubullovë",430,503,1102],["Shtuticë",310,118,934],["Tërdec",78,492,1121],["Tërstenik",300,278,3903],["Vasilevë",608,433,634],["Vërboc",369,246,1247],["Vuçak",204,595,369],["Gllogoc",451,478,6143]]};
+const X0 = 7480369.294, Y1 = 4731536.059, S = 0.042172805347241;
+const fmt = n => n.toLocaleString('de-DE');
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('hero-map');
+const pad = 30, W = GEO.w + pad*2, H = GEO.h + pad*2;
+svg.setAttribute('viewBox', `${-pad} ${-pad} ${W} ${H}`);
+const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+// graticule: 5 km grid in KOSOVAREF01
+const g0 = el('g', {}); svg.appendChild(g0);
+for (let e = 7485000; e < X0 + GEO.w / S; e += 5000) { const x = (e - X0) * S; g0.appendChild(el('line', {x1:x, y1:-pad, x2:x, y2:GEO.h+pad, class:'grat'})); }
+for (let n = 4710000; n < Y1; n += 5000) { const y = (Y1 - n) * S; if (y < 0 || y > GEO.h) continue; g0.appendChild(el('line', {x1:-pad, y1:y, x2:GEO.w+pad, y2:y, class:'grat'})); }
+const popBy = {}; GEO.v.forEach(v => popBy[v[0]] = v[3]);
+const rz = document.getElementById('r-zone'), rp = document.getElementById('r-pop'), re = document.getElementById('r-e'), rn = document.getElementById('r-n');
+GEO.z.forEach((z, i) => {
+  const p = el('path', {d: z[1].map(r => 'M' + r.replace(/ /g, 'L') + 'Z').join(''), class:'zone', tabindex:'0'});
+  p.style.animationDelay = (0.9 + i * 0.03) + 's';
+  const show = () => { rz.textContent = z[0]; rp.textContent = popBy[z[0]] ? fmt(popBy[z[0]]) : '–'; };
+  p.addEventListener('mouseenter', show); p.addEventListener('focus', show);
+  svg.appendChild(p);
+});
+GEO.b.forEach(r => { const p = el('polyline', {points: r, class:'bnd'}); svg.appendChild(p); const L = p.getTotalLength ? p.getTotalLength() : 4000; p.style.setProperty('--len', L); });
+const maxp = Math.max(...GEO.v.map(v => v[3]));
+GEO.v.forEach((v, i) => { const c = el('circle', {cx:v[1], cy:v[2], r: 4 + 15 * Math.sqrt(v[3] / maxp), class:'dot'}); c.style.animationDelay = (1.8 + i * 0.025) + 's'; svg.appendChild(c); });
+const pt = svg.createSVGPoint();
+svg.addEventListener('mousemove', ev => { pt.x = ev.clientX; pt.y = ev.clientY; const m = svg.getScreenCTM(); if (!m) return; const q = pt.matrixTransform(m.inverse());
+  re.textContent = fmt(Math.round(X0 + q.x / S)); rn.textContent = fmt(Math.round(Y1 - q.y / S)); });
+svg.addEventListener('mouseleave', () => { rz.textContent = 'Kaloni mbi hartë'; rp.textContent = '58.531 gjithsej'; });
+
+const CH = [
+ ['01_vendbanimet_popullsia','Vendbanimet dhe popullsia','35','vendbanime','Drenasi shtrihet në zemër të Kosovës, rreth 30 km në perëndim të Prishtinës, përgjatë rrugës N9 Prishtinë–Pejë.',['Sipërfaqja: 27.563 ha (275,6 km²)','Popullsia sipas shtresës: 58.531 banorë','Më të mëdhatë: Gllogoc 6.143, Komoran 4.393, Tërstenik 3.903']],
+ ['02_harta_zonale_HZK','Si përdoret toka','46%','bujqësi','Harta Zonale e Komunës tregon një territor kryesisht bujqësor dhe pyjor, me banimin e dendur të përqendruar vetëm në qytet.',['Bujqësi 12.697 ha · Pyje 9.218 ha','Banim i ulët 2.770 ha (10%)','Shërbim tregtar 576 ha · Industri 374 ha']],
+ ['09_qendra_urbane','Qyteti i Drenasit','94 ha','banim i lartë e i mesëm','Bërthama urbane me banim të lartë (53 ha) dhe të mesëm (41 ha) shtrihet rreth hekurudhës dhe stacioneve, e rrethuar nga banimi i ulët.',['Zona përcakton dendësinë dhe koeficientët e ndërtimit','Kushtet verifikohen për çdo parcelë në HZK/PRrH']],
+ ['03_transporti','Lidhshmëria','5','stacione treni','Rruga nacionale N9 kalon në jug të komunës, ndërsa rrugët rajonale e lidhin qytetin me N9 dhe me veriun.',['Infrastrukturë rrugore: 324 ha','Infrastrukturë hekurudhore: 55 ha','1 stacion autobusësh në qytet']],
+ ['04_uji_ujesjellesi','Qasja në ujë','20/35','vendbanime pa ujësjellës','Shtresa e qasjes në ujësjellës tregon pabarazi të madhe mes qendrës dhe periferisë.',['12 me qasje · 3 me qasje të pjesshme · 20 pa qasje','Rrjeti ekzistues 214 km, i planifikuar +41 km (+19%)','Liqeni i planifikuar i Vërbocit: 68 ha']],
+ ['05_energjia_industria','Energjia dhe industria','322 ha','zonë ere në Sankoc','Rrjeti elektrik, zonat industriale dhe zona e planifikuar për energji të erës.',['70,6 km largpërçues me tension të lartë','283 trafostacione brenda kufirit komunal','Ferronikeli 95,5 ha · Industri (HZK) 374 ha']],
+ ['06_trashegimia','Trashëgimia','29','asete të mbrojtura','Asetet e trashëgimisë kulturore dhe natyrore kanë zona mbrojtëse që ndikojnë drejtpërdrejt në lejet e ndërtimit.',['7 arkeologjike – Kalaja e Llapushnikut, Kalaja në Vërboc','16 arkitekturore – kulla dhe shtëpi tradicionale','6 natyrore – Mali i Kozmaqit, shpella']],
+ ['07_arsimi_mbulueshmeria','Sa larg është shkolla?','95%','e popullsisë brenda 1,5 km','Analizë e distancës nga çdo vendbanim te shkolla fillore më e afërt.',['34 shkolla fillore · 2 të mesme · 2 çerdhe','32 nga 35 vendbanime brenda 1,5 km','Jashtë: Dobroshec, Zabel i Epërm, Gradicë']],
+ ['08_komasacioni','Komasacioni','4.573 ha','tokë e komasuar','Zona e komasacionit mbulon 16,6% të komunës, kryesisht në jug e në qendër.',['Komoran, Tërstenik, Domanek, Zabel i Poshtëm','Parcela të rregullta me qasje në rrugë']]
+];
+const host = document.getElementById('chapters');
+CH.forEach((c, i) => {
+  const a = document.createElement('article'); a.className = 'ch'; a.id = 'k' + (i + 1);
+  a.innerHTML = `<div class="txt"><div class="no">Kapitulli ${String(i+1).padStart(2,'0')} / 09</div><h3>${c[1]}</h3>
+    <div><div class="key">${c[2]}</div><div class="mono">${c[3]}</div></div><p>${c[4]}</p><ul>${c[5].map(x => `<li>${x}</li>`).join('')}</ul></div>
+    <figure class="plate"><button type="button" aria-label="Zmadho hartën: ${c[1]}"><img src="maps/${c[0]}.jpg" alt="Harta: ${c[1]}" loading="lazy" width="2080" height="1300"></button>
+    <figcaption>Fig. ${i+1} · Burimi: HZK Drenas · KOSOVAREF01</figcaption></figure>`;
+  host.appendChild(a);
+});
+const lb = document.getElementById('lb'), lbi = document.getElementById('lbimg');
+host.addEventListener('click', e => { const b = e.target.closest('.plate button'); if (!b) return; const im = b.querySelector('img'); lbi.src = im.src; lbi.alt = im.alt; lb.hidden = false; });
+lb.addEventListener('click', () => lb.hidden = true);
+addEventListener('keydown', e => { if (e.key === 'Escape') lb.hidden = true; });
+document.getElementById('copy').addEventListener('click', async ev => {
+  const b = ev.currentTarget;
+  try { await navigator.clipboard.writeText(document.getElementById('mail').textContent); b.textContent = 'U kopjua'; }
+  catch (_) { const r = document.createRange(); r.selectNodeContents(document.getElementById('mail')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Zgjidhet – kopjo me Ctrl+C'; }
+});
+</script>
+
+</body></html>

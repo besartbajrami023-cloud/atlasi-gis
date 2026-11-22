@@ -1,0 +1,156 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Vëllimi i Parcelës</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: kontrollet majtas, skena izometrike djathtas, treguesit poshtë */
+:root{--bg:#eef1f4;--panel:#fff;--fg:#1a2230;--muted:#5f6b7c;--line:#d5dbe3;--accent:#2d6cdf;
+--parcel:#cfe3c7;--setback:#e9c46a;--top:#f4f6f9;--sideA:#9fb3cc;--sideB:#7d93b0;--warn:#c4472f;--ok:#2f8a57;
+--display:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141b;--panel:#171d27;--fg:#e4e9f1;--muted:#93a0b3;--line:#283142;--accent:#6c9cff;--parcel:#2c4a33;--setback:#7a6324;--top:#d6dde8;--sideA:#6d82a1;--sideB:#4f6383;--warn:#ff7b61;--ok:#5cc58a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10141b;--panel:#171d27;--fg:#e4e9f1;--muted:#93a0b3;--line:#283142;--accent:#6c9cff;--parcel:#2c4a33;--setback:#7a6324;--top:#d6dde8;--sideA:#6d82a1;--sideB:#4f6383;--warn:#ff7b61;--ok:#5cc58a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body)}
+.wrap{max-width:1200px;margin:0 auto;padding-block:26px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+h1{font-family:var(--display);font-size:clamp(26px,4vw,40px);margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:72ch;line-height:1.5}
+.eyebrow{font:500 12px var(--mono);color:var(--accent);letter-spacing:.05em}
+.main{display:grid;grid-template-columns:320px 1fr;gap:18px}
+@media(max-width:860px){.main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.ctls{display:grid;gap:14px;align-content:start}
+.ctl{display:grid;gap:5px}
+.ctl label{display:flex;justify-content:space-between;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.ctl label b{font:500 13px var(--mono);color:var(--fg);text-transform:none;letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.grp{font:600 12px var(--display);color:var(--fg);border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+button{font:500 12px var(--body);border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:6px 10px;border-radius:6px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+canvas{width:100%;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--panel);padding:12px 14px}
+.stat span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat b{font:500 20px var(--mono);font-variant-numeric:tabular-nums}
+.stat small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.flag{font-size:13px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);line-height:1.5}
+.flag.warn{border-color:var(--warn);color:var(--warn)}
+.flag.ok{border-color:var(--ok);color:var(--ok)}
+.note{font-size:12px;color:var(--muted);line-height:1.55;max-width:95ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ISP · KIN · DISTANCAT NGA KUFIRI</div>
+    <h1>Vëllimi i Parcelës</h1>
+    <p class="sub">Simulim i shpejtë i kapacitetit ndërtimor të një parcele sipas parametrave të hartës zonale: sa kate, sa m² bruto, sa banesa dhe sa vende parkimi dalin realisht.</p>
+  </header>
+
+  <div class="main">
+    <aside class="card ctls">
+      <div class="presets">
+        <button data-p="20,20,60,3.0,4,3,4">4 ari · K 3.0</button>
+        <button data-p="30,50,40,1.2,5,3,4">15 ari · K 1.2</button>
+        <button data-p="40,85,35,0.6,6,4,5">34 ari · banim individual</button>
+      </div>
+      <div class="grp">Parcela</div>
+      <div class="ctl"><label for="W">Gjerësia (frontit) <b id="WV"></b></label><input id="W" type="range" min="10" max="120" value="20"></div>
+      <div class="ctl"><label for="D">Thellësia <b id="DV"></b></label><input id="D" type="range" min="10" max="150" value="20"></div>
+      <div class="grp">Parametrat urbanistikë</div>
+      <div class="ctl"><label for="ISP">ISP (shfrytëzimi) <b id="ISPV"></b></label><input id="ISP" type="range" min="10" max="90" value="60"></div>
+      <div class="ctl"><label for="KIN">KIN (indeksi i ndërtimit) <b id="KINV"></b></label><input id="KIN" type="range" min="0.2" max="6" step="0.1" value="3.0"></div>
+      <div class="ctl"><label for="F">Distanca nga rruga <b id="FV"></b></label><input id="F" type="range" min="0" max="15" step="0.5" value="4"></div>
+      <div class="ctl"><label for="S">Distanca anësore <b id="SV"></b></label><input id="S" type="range" min="0" max="10" step="0.5" value="3"></div>
+      <div class="ctl"><label for="B">Distanca e pasme <b id="BV"></b></label><input id="B" type="range" min="0" max="15" step="0.5" value="4"></div>
+      <div class="ctl"><label for="FH">Lartësia e katit <b id="FHV"></b></label><input id="FH" type="range" min="2.8" max="4" step="0.1" value="3.1"></div>
+      <div class="ctl"><label for="U">Banesa mesatare (neto) <b id="UV"></b></label><input id="U" type="range" min="45" max="140" step="5" value="75"></div>
+    </aside>
+    <section class="card" style="display:grid;gap:12px"><canvas id="c"></canvas><div id="flag" class="flag"></div></section>
+  </div>
+
+  <section class="stats">
+    <div class="stat"><span>Sipërfaqja e parcelës</span><b id="sA"></b><small id="sA2"></small></div>
+    <div class="stat"><span>Gjurma e objektit</span><b id="sFP"></b><small id="sFP2"></small></div>
+    <div class="stat"><span>Sipërfaqja bruto (GFA)</span><b id="sG"></b><small>KIN × parcela</small></div>
+    <div class="stat"><span>Numri i kateve</span><b id="sN"></b><small id="sH"></small></div>
+    <div class="stat"><span>Banesa (afërsisht)</span><b id="sU"></b><small>neto 80% e GFA</small></div>
+    <div class="stat"><span>Parkingje të nevojshme</span><b id="sP"></b><small id="sP2"></small></div>
+  </section>
+
+  <p class="note">Modeli supozon parcelë drejtkëndore dhe objekt kompakt, i vendosur te distanca nga rruga. ISP kufizon gjurmën, KIN kufizon sipërfaqen bruto mbi tokë. Kati i fundit shfaqet i pjesshëm kur GFA nuk mbush kat të plotë. Parkingu: 1 vend për banesë, 25 m² për vend në garazh nëntokësor. Vlerat janë orientuese; për leje vlejnë PRrH dhe harta zonale e Komunës. · MSc. Besart Bajrami, GIS Specialist · 20.11.2026</p>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const ids=["W","D","ISP","KIN","F","S","B","FH","U"];
+const nf=(v,d=0)=>v.toLocaleString("de-DE",{maximumFractionDigits:d,minimumFractionDigits:d});
+function calc(){
+  const v={};ids.forEach(i=>v[i]=+$(i).value);
+  const A=v.W*v.D, bwMax=Math.max(0,v.W-2*v.S), bdMax=Math.max(0,v.D-v.F-v.B);
+  const fpMaxGeom=bwMax*bdMax, fpMaxISP=A*v.ISP/100;
+  let bw=bwMax,bd=bdMax,lim="distancat";
+  if(fpMaxISP<fpMaxGeom){const k=Math.sqrt(fpMaxISP/fpMaxGeom);bw*=k;bd*=k;lim="ISP"}
+  const FP=bw*bd, GFA=A*v.KIN, floors=FP>0?GFA/FP:0;
+  return {v,A,bw,bd,FP,GFA,floors,lim};
+}
+function draw(r){
+  const c=$("c"),w=c.clientWidth,h=Math.max(360,Math.min(620,w*.72)),dpr=devicePixelRatio||1;
+  c.width=w*dpr;c.height=h*dpr;c.style.height=h+"px";const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);
+  const {v,bw,bd,floors}=r, H=Math.ceil(floors)*v.FH;
+  const cs=Math.cos(Math.PI/6),sn=.5;
+  const span=(v.W+v.D)*cs, vert=(v.W+v.D)*sn+H;
+  const s=Math.min((w-60)/span,(h-70)/vert);
+  const ox=w/2-((v.W-v.D)*cs*s)/2, oy=h-30-(v.W+v.D)*sn*s;
+  const P=(X,Y,Z)=>[ox+(X-Y)*cs*s, oy+(X+Y)*sn*s - Z*s]; // X gjerësia, Y thellësia (Y=0 ana e pasme)
+  const poly=(pts,fill,stroke)=>{x.beginPath();pts.forEach((p,i)=>{const q=P(...p);i?x.lineTo(...q):x.moveTo(...q)});x.closePath();if(fill){x.fillStyle=fill;x.fill()}if(stroke){x.strokeStyle=stroke;x.lineWidth=1;x.stroke()}};
+  // parcela (Y=D është fronti nga rruga, afër shikuesit)
+  poly([[0,0,0],[v.W,0,0],[v.W,v.D,0],[0,v.D,0]],css("--parcel"),css("--fg"));
+  x.setLineDash([4,4]);poly([[v.S,v.B,0],[v.W-v.S,v.B,0],[v.W-v.S,v.D-v.F,0],[v.S,v.D-v.F,0]],null,css("--setback"));x.setLineDash([]);
+  // rruga
+  poly([[-4,v.D+1,0],[v.W+4,v.D+1,0],[v.W+4,v.D+7,0],[-4,v.D+7,0]],css("--line"));
+  const [rx,ry]=P(v.W/2,v.D+4,0);x.fillStyle=css("--muted");x.font="600 11px Inter";x.textAlign="center";x.fillText("RRUGA",rx,ry+4);
+  // objekti, i ankoruar te distanca nga rruga
+  const x0=(v.W-bw)/2,y1=v.D-v.F,y0=y1-bd,x1=x0+bw;
+  if(bw>0&&bd>0){
+    const full=Math.floor(floors),part=floors-full,n=Math.ceil(floors-1e-9);
+    for(let i=0;i<n;i++){
+      const z0=i*v.FH, frac=(i===full&&part>1e-6)?part:1;
+      const yb=y1-bd*frac; // kati i pjesshëm zë vetëm pjesën ballore
+      const z1=z0+v.FH;
+      poly([[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]],css("--sideA"),css("--fg"));
+      poly([[x1,yb,z0],[x1,y1,z0],[x1,y1,z1],[x1,yb,z1]],css("--sideB"),css("--fg"));
+      poly([[x0,yb,z1],[x1,yb,z1],[x1,y1,z1],[x0,y1,z1]],css("--top"),css("--fg"));
+    }
+    const [lx,ly]=P(x1,y0,n*v.FH);x.fillStyle=css("--fg");x.textAlign="left";x.font="600 12px JetBrains Mono, monospace";
+    x.fillText("P+"+(n-1)+"  ·  "+nf(n*v.FH,1)+" m",lx+8,ly);
+  }
+  // kuotat
+  x.fillStyle=css("--muted");x.font="11px JetBrains Mono, monospace";x.textAlign="center";
+  const [ax,ay]=P(v.W/2,v.D,0);x.fillText(nf(v.W)+" m",ax-14,ay+22);
+  const [bx,by]=P(v.W,v.D/2,0);x.fillText(nf(v.D)+" m",bx+26,by+10);
+  // shigjeta veriu (veriu supozohet në pjesën e pasme)
+  x.fillStyle=css("--fg");x.beginPath();x.moveTo(w-26,14);x.lineTo(w-33,34);x.lineTo(w-26,29);x.lineTo(w-19,34);x.closePath();x.fill();x.font="600 11px Inter";x.fillText("V",w-26,46);
+}
+function update(){
+  const r=calc(),{v}=r;
+  $("WV").textContent=v.W+" m";$("DV").textContent=v.D+" m";$("ISPV").textContent=v.ISP+"%";$("KINV").textContent=v.KIN.toFixed(1);
+  $("FV").textContent=v.F+" m";$("SV").textContent=v.S+" m";$("BV").textContent=v.B+" m";$("FHV").textContent=v.FH.toFixed(1)+" m";$("UV").textContent=v.U+" m²";
+  $("sA").textContent=nf(r.A)+" m²";$("sA2").textContent=nf(r.A/100,2)+" ari · "+nf(r.A/10000,3)+" ha";
+  $("sFP").textContent=nf(r.FP)+" m²";$("sFP2").textContent=nf(r.bw,1)+" × "+nf(r.bd,1)+" m · kufizon "+r.lim;
+  $("sG").textContent=nf(r.GFA)+" m²";
+  const n=Math.ceil(r.floors-1e-9);$("sN").textContent=r.FP>0?"P+"+(n-1):"–";$("sH").textContent=r.FP>0?nf(r.floors,2)+" kate ekuivalente · "+nf(n*v.FH,1)+" m":"";
+  const units=Math.floor(r.GFA*.8/v.U);$("sU").textContent=nf(units);
+  $("sP").textContent=nf(units);$("sP2").textContent="≈ "+nf(units*25)+" m² garazh · "+nf(units*25/r.A,1)+" nivele nëntokë";
+  const f=$("flag");
+  if(r.FP<=0){f.className="flag warn";f.textContent="Distancat nga kufiri nuk lënë hapësirë për objekt në këtë parcelë."}
+  else if(r.floors>12){f.className="flag warn";f.textContent="Me këtë gjurmë del objekt P+"+(n-1)+". Kontrollo nëse harta zonale lejon këtë lartësi; zakonisht kufiri i lartësisë e ul kapacitetin real."}
+  else{f.className="flag ok";f.textContent="Kapaciteti kufizohet nga "+r.lim+". Objekti i mundshëm: P+"+(n-1)+", rreth "+nf(units)+" banesa me "+v.U+" m² neto."}
+  draw(r);
+}
+ids.forEach(i=>$(i).addEventListener("input",update));
+document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const p=b.dataset.p.split(",");["W","D","ISP","KIN","S","F","B"].forEach((k,i)=>{$(k).value=p[i]});update()});
+addEventListener("resize",update);matchMedia("(prefers-color-scheme: dark)").addEventListener("change",update);
+update();
+</script>
+
+</body></html>

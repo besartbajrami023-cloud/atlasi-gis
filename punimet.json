@@ -7,5 +7,140 @@
     "kopertina": "harta/2026-11-era-mbi-kosove.jpg",
     "pershkrimi": "Rrjedha e erës në 10 m mbi tokë, 10–19 nëntor 2026, me grimca të animuara mbi reliev. Prek hartën për vlerat në çdo pikë. Burimi: ICON-EU (DWD, ~7 km) përmes Open-Meteo, rrjetë 5 km.",
     "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Vendbanimet dhe popullsia",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/01_vendbanimet_popullsia.jpg",
+    "kopertina": "",
+    "pershkrimi": "35 zona kadastrale, 27.563 ha; numri i banorëve sipas vendbanimeve. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Harta Zonale (HZK), shfrytëzimi i tokës",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/02_harta_zonale_HZK.jpg",
+    "kopertina": "",
+    "pershkrimi": "Zonat bazë të shfrytëzimit të tokës me sipërfaqet në ha dhe përqindje. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Infrastruktura e transportit",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/03_transporti.jpg",
+    "kopertina": "",
+    "pershkrimi": "Rrjeti rrugor, hekurudha, stacionet e trenit dhe të autobusëve. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Qasja në ujësjellës",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/04_uji_ujesjellesi.jpg",
+    "kopertina": "",
+    "pershkrimi": "Qasja sipas vendbanimeve, rrjeti ekzistues (214 km) dhe i planifikuar (41 km). Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Energjia dhe industria",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/05_energjia_industria.jpg",
+    "kopertina": "",
+    "pershkrimi": "Largpërçuesit, 283 trafostacione, zona e energjisë së erës dhe zonat industriale. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Trashëgimia kulturore dhe natyrore",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/06_trashegimia.jpg",
+    "kopertina": "",
+    "pershkrimi": "Asetet arkeologjike, arkitekturore dhe natyrore sipas HZK-së. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Shkollat dhe mbulueshmëria 1,5 km",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/07_arsimi_mbulueshmeria.jpg",
+    "kopertina": "",
+    "pershkrimi": "32 nga 35 vendbanime brenda 1,5 km nga shkolla fillore; 95% e popullsisë. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi – Komasacioni i tokës bujqësore",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/08_komasacioni.jpg",
+    "kopertina": "",
+    "pershkrimi": "Zona e komasacionit 4.573 ha (16,6% e komunës). Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Qyteti i Drenasit – Zonat e banimit dhe shërbimeve",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/maps/09_qendra_urbane.jpg",
+    "kopertina": "",
+    "pershkrimi": "Zmadhim i zonës urbane: dendësia e banimit sipas HZK-së. Burimi: Komuna e Drenasit – HZK / PZHK, shtresat GIS_Gllogoc · KOSOVAREF01.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "harta",
+    "titulli": "Drenasi në nëntë harta – story map",
+    "data": "2026-10-22",
+    "fajlli": "harta/drenas/index.html",
+    "kopertina": "harta/drenas/kopertina.jpg",
+    "pershkrimi": "Faqe interaktive me hartën e Drenasit dhe nëntë kapituj: popullsia, zonimi, transporti, uji, energjia, trashëgimia, arsimi, komasacioni dhe qendra urbane.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "analiza",
+    "titulli": "Sa larg je nga një rrugë kryesore?",
+    "data": "2026-10-23",
+    "fajlli": "harta/rruget/index.html",
+    "kopertina": "harta/rruget/kopertina.jpg",
+    "pershkrimi": "Distanca e çdo pike të Kosovës (rrjetë 50 m) nga rruga nacionale/rajonale më e afërt, renditja e 38 komunave dhe rrjeti rrugor i Prishtinës. 53% e territorit është ≤ 2 km nga një rrugë kryesore.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "analiza",
+    "titulli": "Potenciali solar i Kosovës sipas komunave (raport PDF)",
+    "data": "2026-11-03",
+    "fajlli": "analiza/2026-11-potenciali-solar-kosova.pdf",
+    "kopertina": "analiza/2026-11-potenciali-solar-kosova.jpg",
+    "pershkrimi": "Raport 11 faqe: prodhimi vjetor fotovoltaik (PVOUT), orët me diell, hija e relievit dhe toka e përshtatshme për parqe solare në 38 komuna. Global Solar Atlas + DEM.",
+    "shkarko": "analiza/2026-11-potenciali-solar-kosova.pdf"
+  },
+  {
+    "lloji": "analiza",
+    "titulli": "Dielli mbi Drenas – trajektorja dhe hija",
+    "data": "2026-11-20",
+    "fajlli": "analiza/2026-11-dielli-mbi-drenas.html",
+    "kopertina": "analiza/2026-11-dielli-mbi-drenas.jpg",
+    "pershkrimi": "Mjet interaktiv: lartësia dhe azimuti i diellit sipas datës e orës (NOAA) dhe gjatësia e hijes së një objekti në Drenas.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "analiza",
+    "titulli": "Vëllimi i Parcelës – kapaciteti ndërtimor 3D",
+    "data": "2026-11-20",
+    "fajlli": "analiza/2026-11-vellimi-i-parceles.html",
+    "kopertina": "analiza/2026-11-vellimi-i-parceles.jpg",
+    "pershkrimi": "Simulator 3D i kapacitetit ndërtimor sipas ISP, KIN, distancave nga kufiri dhe lartësisë së katit: m² bruto, kate, banesa dhe parkingje.",
+    "shkarko": ""
+  },
+  {
+    "lloji": "analiza",
+    "titulli": "Katalogu i Layerave – Gllogoc/Drenas",
+    "data": "2026-10-22",
+    "fajlli": "analiza/2026-10-katalogu-i-layerave.html",
+    "kopertina": "analiza/2026-10-katalogu-i-layerave.jpg",
+    "pershkrimi": "92 shtresat GIS të komunës sipas temave (zonimi, transporti, uji, trashëgimia etj.), me kërkim dhe filtër.",
+    "shkarko": ""
   }
 ]

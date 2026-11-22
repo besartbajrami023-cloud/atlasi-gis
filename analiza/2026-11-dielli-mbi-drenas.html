@@ -1,0 +1,182 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Dielli mbi Drenas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: kontrollet lart, dy panele (diagrami polar + plani me hije), statistika poshtë */
+:root{
+  --bg:#f3f5f2; --panel:#ffffff; --fg:#1d2420; --muted:#5e6b63; --line:#d7ddd8;
+  --accent:#d98a1c; --sun:#f2b134; --shadow:rgba(40,55,70,.42); --bld:#2f6b55; --grid:#e6ebe7;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121614; --panel:#1a201d; --fg:#e6ece8; --muted:#94a39a; --line:#2c3531;
+  --accent:#f0a43a; --sun:#f6c453; --shadow:rgba(0,0,0,.55); --bld:#4fa383; --grid:#232b27; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121614; --panel:#1a201d; --fg:#e6ece8; --muted:#94a39a; --line:#2c3531;
+  --accent:#f0a43a; --sun:#f6c453; --shadow:rgba(0,0,0,.55); --bld:#4fa383; --grid:#232b27; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+h1{font-family:var(--display);font-size:clamp(26px,4vw,40px);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:70ch;line-height:1.5}
+.coords{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.04em}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.ctl{display:grid;gap:6px;min-width:0}
+.ctl label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;justify-content:space-between}
+.ctl label b{font-family:var(--mono);color:var(--fg);font-weight:500;text-transform:none;letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+button{font:500 12px var(--body);border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:6px 10px;border-radius:6px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.play{background:var(--accent);color:#1b1206;border-color:var(--accent);font-weight:600}
+.panels{display:grid;grid-template-columns:1fr 1.25fr;gap:18px}
+@media(max-width:820px){.panels{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.card h2{font-family:var(--display);font-size:15px;margin:0 0 8px;font-weight:600}
+canvas{width:100%;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--panel);padding:12px 14px}
+.stat span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat b{font-family:var(--mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.stat.key b{color:var(--accent)}
+.note{font-size:12px;color:var(--muted);line-height:1.55;max-width:90ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="coords">42.6253° N · 20.8987° E · DRENAS / GLLOGOC</div>
+    <h1>Dielli mbi Drenas</h1>
+    <p class="sub">Trajektorja e diellit dhe hija e një objekti, e llogaritur me algoritmin NOAA për çdo datë dhe orë. Ndrysho lartësinë e objektit dhe shih sa larg shtrihet hija, sidomos në solsticin e dimrit.</p>
+  </header>
+
+  <section class="controls">
+    <div class="ctl"><label for="day">Data <b id="dayV"></b></label><input id="day" type="range" min="1" max="365" value="324">
+      <div class="presets"><button data-d="80">21 Mar</button><button data-d="172">21 Qer</button><button data-d="266">23 Sht</button><button data-d="355">21 Dhj</button></div></div>
+    <div class="ctl"><label for="hr">Ora (lokale) <b id="hrV"></b></label><input id="hr" type="range" min="4" max="21" step="0.05" value="12">
+      <div class="presets"><button class="play" id="play">▶ Luaj ditën</button></div></div>
+    <div class="ctl"><label for="h">Lartësia e objektit <b id="hV"></b></label><input id="h" type="range" min="3" max="60" step="0.5" value="24"></div>
+    <div class="ctl"><label for="rot">Orientimi i objektit <b id="rotV"></b></label><input id="rot" type="range" min="0" max="90" value="15"></div>
+  </section>
+
+  <section class="panels">
+    <div class="card"><h2>Diagrami i trajektores diellore</h2><canvas id="polar"></canvas></div>
+    <div class="card"><h2>Plani: objekti 20 × 12 m dhe hija</h2><canvas id="plan"></canvas></div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><span>Lartësia e diellit</span><b id="sAlt">–</b></div>
+    <div class="stat"><span>Azimuti</span><b id="sAz">–</b></div>
+    <div class="stat key"><span>Gjatësia e hijes</span><b id="sLen">–</b></div>
+    <div class="stat"><span>Lindja / Perëndimi</span><b id="sRise">–</b></div>
+    <div class="stat"><span>Ditë me diell</span><b id="sDay">–</b></div>
+    <div class="stat key"><span>Distanca min. (21 Dhj, 12:00)</span><b id="sMin">–</b></div>
+  </section>
+
+  <p class="note">Distanca minimale është gjatësia e hijes në mesditën diellore të 21 dhjetorit, kur dielli është më i ulët; objekti fqinj në veri në këtë distancë merr diell në mesditë gjatë gjithë vitit. Llogaritja supozon terren të rrafshët, pa relievin përreth dhe pa objekte të tjera. Ora lokale përfshin kalimin në orën verore (CEST). Burimi: NOAA Solar Calculator · Vizualizim: MSc. Besart Bajrami, GIS Specialist · 20.11.2026</p>
+</div>
+
+<script>
+const LAT=42.6253, LON=20.8987, R=Math.PI/180;
+const $=id=>document.getElementById(id);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const MON=["Jan","Shk","Mar","Pri","Maj","Qer","Kor","Gus","Sht","Tet","Nën","Dhj"];
+
+function tz(doy){return (doy>=88&&doy<=298)?2:1} // CEST afërsisht fund mars – fund tetor
+function sun(doy,hLocal){
+  const utc=hLocal-tz(doy);
+  const g=2*Math.PI/365*(doy-1+(utc-12)/24);
+  const eqt=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  const dec=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+  const tst=utc*60+eqt+4*LON;
+  const ha=(tst/4-180)*R, la=LAT*R;
+  const cz=Math.sin(la)*Math.sin(dec)+Math.cos(la)*Math.cos(dec)*Math.cos(ha);
+  const zen=Math.acos(Math.max(-1,Math.min(1,cz)));
+  let az=Math.acos(Math.max(-1,Math.min(1,(Math.sin(la)*Math.cos(zen)-Math.sin(dec))/(Math.cos(la)*Math.sin(zen)))))/R;
+  az = ha>0 ? (az+180)%360 : (540-az)%360;
+  return {alt:90-zen/R, az, dec, eqt};
+}
+function riseSet(doy){
+  const s=sun(doy,12), la=LAT*R;
+  const c=(Math.cos(90.833*R)/(Math.cos(la)*Math.cos(s.dec)))-Math.tan(la)*Math.tan(s.dec);
+  const ha=Math.acos(Math.max(-1,Math.min(1,c)))/R;
+  const noon=(720-4*LON-s.eqt)/60+tz(doy);
+  return {rise:noon-ha/15, set:noon+ha/15, noon};
+}
+const fmtH=h=>{const m=Math.round(h*60);return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+const dateOf=d=>{const t=new Date(Date.UTC(2026,0,d));return t.getUTCDate()+" "+MON[t.getUTCMonth()]};
+
+function fit(c,ratio){const w=c.clientWidth,dpr=devicePixelRatio||1;c.width=w*dpr;c.height=w*ratio*dpr;c.style.height=w*ratio+"px";const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);return [x,w,w*ratio]}
+
+function drawPolar(doy,hr){
+  const [x,w,h]=fit($("polar"),1);const cx=w/2,cy=h/2,r=Math.min(w,h)/2-26;
+  const P=(alt,az)=>{const rr=r*(90-alt)/90;return [cx+rr*Math.sin(az*R),cy-rr*Math.cos(az*R)]};
+  x.strokeStyle=css("--grid");x.lineWidth=1;x.fillStyle=css("--muted");x.font="10px JetBrains Mono, monospace";
+  for(let a=0;a<90;a+=15){x.beginPath();x.arc(cx,cy,r*(90-a)/90,0,7);x.stroke();if(a)x.fillText(a+"°",cx+3,cy-r*(90-a)/90+11)}
+  for(let a=0;a<360;a+=30){const[px,py]=P(0,a);x.beginPath();x.moveTo(cx,cy);x.lineTo(px,py);x.stroke()}
+  x.font="600 12px Inter, sans-serif";x.fillStyle=css("--fg");x.textAlign="center";x.textBaseline="middle";
+  [["V",0],["L",90],["J",180],["P",270]].forEach(([t,a])=>{const[px,py]=P(-9,a);x.fillText(t,px,py)});
+  const curve=(d,col,wd,dash)=>{x.beginPath();let on=false;for(let t=3;t<=22;t+=.1){const s=sun(d,t);if(s.alt<0){on=false;continue}const[px,py]=P(s.alt,s.az);on?x.lineTo(px,py):x.moveTo(px,py);on=true}x.strokeStyle=col;x.lineWidth=wd;x.setLineDash(dash||[]);x.stroke();x.setLineDash([])};
+  curve(172,css("--muted"),1.2,[4,4]);curve(355,css("--muted"),1.2,[4,4]);curve(80,css("--muted"),1,[2,4]);
+  curve(doy,css("--accent"),2.4);
+  // shenjat e orëve
+  x.fillStyle=css("--accent");x.font="10px JetBrains Mono, monospace";
+  for(let t=5;t<=20;t++){const s=sun(doy,t);if(s.alt>2){const[px,py]=P(s.alt,s.az);x.beginPath();x.arc(px,py,2.5,0,7);x.fill();x.fillText(t,px,py-9)}}
+  const s=sun(doy,hr);
+  if(s.alt>0){const[px,py]=P(s.alt,s.az);const g=x.createRadialGradient(px,py,0,px,py,18);g.addColorStop(0,css("--sun"));g.addColorStop(1,"transparent");x.fillStyle=g;x.beginPath();x.arc(px,py,18,0,7);x.fill();x.fillStyle=css("--sun");x.beginPath();x.arc(px,py,7,0,7);x.fill()}
+  x.textAlign="left";x.fillStyle=css("--muted");x.font="10px Inter, sans-serif";x.fillText("- - 21 Qer / 21 Dhj   ··· ekuinoksi",8,h-8);
+}
+
+function drawPlan(hr,doy,H,rot){
+  const [x,w,h]=fit($("plan"),.8);const s=sun(doy,hr);
+  const scale=Math.min(w,h)/150; // 150 m në gjerësi
+  const cx=w*.5,cy=h*.5;
+  x.strokeStyle=css("--grid");x.lineWidth=1;
+  for(let m=-200;m<=200;m+=10){x.beginPath();x.moveTo(cx+m*scale,0);x.lineTo(cx+m*scale,h);x.stroke();x.beginPath();x.moveTo(0,cy+m*scale);x.lineTo(w,cy+m*scale);x.stroke()}
+  const a=rot*R, pts=[[-10,-6],[10,-6],[10,6],[-10,6]].map(([px,py])=>[px*Math.cos(a)-py*Math.sin(a),px*Math.sin(a)+py*Math.cos(a)]);
+  const toS=([e,n])=>[cx+e*scale,cy-n*scale];
+  let len=null;
+  if(s.alt>0.5){
+    len=H/Math.tan(s.alt*R); const dx=-Math.sin(s.az*R)*len, dy=-Math.cos(s.az*R)*len;
+    const all=pts.concat(pts.map(([e,n])=>[e+dx,n+dy]));
+    // mbështjellësja konvekse
+    const hull=(p)=>{p=p.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];for(const q of p){while(lo.length>1&&cr(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q)}for(const q of p.reverse()){while(up.length>1&&cr(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q)}return lo.slice(0,-1).concat(up.slice(0,-1))};
+    const hp=hull(all);x.fillStyle=css("--shadow");x.beginPath();hp.forEach((p,i)=>{const[sx,sy]=toS(p);i?x.lineTo(sx,sy):x.moveTo(sx,sy)});x.closePath();x.fill();
+    // rrezja drejt diellit
+    const[sx,sy]=toS([Math.sin(s.az*R)*60,Math.cos(s.az*R)*60]);x.strokeStyle=css("--sun");x.setLineDash([3,4]);x.beginPath();x.moveTo(cx,cy);x.lineTo(sx,sy);x.stroke();x.setLineDash([]);
+    x.fillStyle=css("--sun");x.beginPath();x.arc(sx,sy,6,0,7);x.fill();
+  }
+  x.fillStyle=css("--bld");x.beginPath();pts.forEach((p,i)=>{const[sx,sy]=toS(p);i?x.lineTo(sx,sy):x.moveTo(sx,sy)});x.closePath();x.fill();
+  x.fillStyle="#fff";x.font="600 11px JetBrains Mono, monospace";x.textAlign="center";x.textBaseline="middle";x.fillText(H+" m",cx,cy);
+  // shigjeta e veriut
+  x.fillStyle=css("--fg");x.beginPath();x.moveTo(w-24,14);x.lineTo(w-31,34);x.lineTo(w-24,29);x.lineTo(w-17,34);x.closePath();x.fill();x.font="600 11px Inter";x.fillText("V",w-24,44);
+  // shkalla
+  x.strokeStyle=css("--fg");x.lineWidth=2;x.beginPath();x.moveTo(14,h-16);x.lineTo(14+25*scale,h-16);x.stroke();
+  x.textAlign="left";x.font="10px JetBrains Mono, monospace";x.fillText("0       25 m",14,h-28);
+  if(!(s.alt>0.5)){x.textAlign="center";x.fillStyle=css("--muted");x.font="500 13px Inter";x.fillText("Dielli nën horizont",cx,30)}
+  return {s,len};
+}
+
+function update(){
+  const doy=+$("day").value, hr=+$("hr").value, H=+$("h").value, rot=+$("rot").value;
+  $("dayV").textContent=dateOf(doy);$("hrV").textContent=fmtH(hr);$("hV").textContent=H+" m (~"+Math.round(H/3)+" kate)";$("rotV").textContent=rot+"°";
+  drawPolar(doy,hr);const {s,len}=drawPlan(hr,doy,H,rot);
+  $("sAlt").textContent=s.alt>0?s.alt.toFixed(1)+"°":"nën horizont";
+  $("sAz").textContent=s.az.toFixed(1)+"°";
+  $("sLen").textContent=len==null?"–":(len>999?">1 km":len.toFixed(1)+" m");
+  const rs=riseSet(doy);$("sRise").textContent=fmtH(rs.rise)+" / "+fmtH(rs.set);
+  const dl=rs.set-rs.rise;$("sDay").textContent=Math.floor(dl)+" h "+Math.round((dl%1)*60)+" min";
+  const w=riseSet(355),sw=sun(355,w.noon);$("sMin").textContent=(H/Math.tan(sw.alt*R)).toFixed(1)+" m";
+}
+document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{$("day").value=b.dataset.d;update()});
+["day","hr","h","rot"].forEach(i=>$(i).addEventListener("input",update));
+let timer=null;
+$("play").onclick=()=>{if(timer){clearInterval(timer);timer=null;$("play").textContent="▶ Luaj ditën";return}
+  const rs=riseSet(+$("day").value);let t=rs.rise;$("play").textContent="❚❚ Ndalo";
+  timer=setInterval(()=>{t+=0.08;if(t>rs.set){t=rs.rise}$("hr").value=t;update()},40)};
+addEventListener("resize",update);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",update);
+update();
+</script>
+
+</body></html>
