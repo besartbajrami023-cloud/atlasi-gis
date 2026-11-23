@@ -1,5 +1,14 @@
 [
   {
+    "lloji": "video",
+    "titulli": "Si gravitojnë vendbanimet e Kosovës drejt Prishtinës",
+    "data": "2026-11-23",
+    "fajlli": "video/2026-11-gravitimi-kosova.mp4",
+    "kopertina": "video/2026-11-gravitimi-kosova.png",
+    "pershkrimi": "Video 22 s në stil dashboard-i: 1.305 vendbanime → 38 qendra komunale → 7 qendra regjionale → Prishtina (1.304 lidhje, distancë ajrore). Më larg nga Prishtina: Gllobocicë (Dragash), 94,5 km. Burimi: kufijtë e vendbanimeve – replikë e AKK/KGP (M. Agathon, 2019), komunat geoBoundaries · KOSOVAREF01 (EPSG:9141).",
+    "shkarko": "video/2026-11-gravitimi-kosova.mp4"
+  },
+  {
     "lloji": "harta",
     "titulli": "Drenasi – Infrastruktura energjetike dhe zonat e veçanta (A4)",
     "data": "2026-11-22",
